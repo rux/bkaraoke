@@ -156,7 +156,7 @@ var Spinner = React.createClass({
 	render:function() {
 		if (this.props.songCount === 0) {
 			return (
-				<div style={{textAlign:"center"}}>
+				<div className="status">
 					<div>
 						Getting song list...
 					</div>
@@ -167,7 +167,7 @@ var Spinner = React.createClass({
 			);
 		} else {
 			return (
-				<div style={{textAlign:"center"}}>
+				<div className="status">
 					Number of songs = {this.props.songCount}
 				</div>
 			);

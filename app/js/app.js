@@ -160,7 +160,7 @@ webpackJsonp([1,0],[
 		render:function() {
 			if (this.props.songCount === 0) {
 				return (
-					React.createElement("div", {style: {textAlign:"center"}}, 
+					React.createElement("div", {className: "status"}, 
 						React.createElement("div", null, 
 							"Getting song list..."
 						), 
@@ -171,7 +171,7 @@ webpackJsonp([1,0],[
 				);
 			} else {
 				return (
-					React.createElement("div", {style: {textAlign:"center"}}, 
+					React.createElement("div", {className: "status"}, 
 						"Number of songs = ", this.props.songCount
 					)
 				);

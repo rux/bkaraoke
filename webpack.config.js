@@ -11,7 +11,6 @@ module.exports = {
             "react",
             "react-dom",
             "csvtojson",
-            "material-ui",
             "superagent"
         ],
         sourceMapFilename: "app/js/source.js"
