@@ -1,7 +1,8 @@
 body {
-	font-family: Helvetica, Arial, sans-serif;
+	font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	background-color: #333;
 	color:#eee;
+	font-weight:lighter;
 }
 
 input {
@@ -21,11 +22,13 @@ tr:nth-child(even) {
 }
 th, td {
     font-size: 3vw;
+    padding:0.4em;
 }
 
 .status {
 	color:#888;
 	text-align:center;
+    padding:0.4em;
 }
 
 
