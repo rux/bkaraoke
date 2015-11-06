@@ -40,8 +40,7 @@ module.exports = {
         extensions: ['', '.js', '.jsx']
     },
     plugins: [
-        new webpack.optimize.CommonsChunkPlugin('vendors', 'app/js/vendors.js'),
-        new webpack.optimize.UglifyJsPlugin({minimize: true})
+        new webpack.optimize.CommonsChunkPlugin('vendors', 'app/js/vendors.js')
    	],
     devtool: 'sourcemap'
 }

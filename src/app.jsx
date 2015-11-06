@@ -14,14 +14,23 @@ var KaraokeApp = React.createClass({
 	},
 
 	componentDidMount: function() {
-		console.log("KaraokeApp mounted");
+		console.log("bkaraoke initialised");
 
 		var self=this;
 		var saveCsvToState = function( err,response) {
 				if (response.ok) {
-					console.log ('yay got stuff',  response);
+					// console.log ('yay got stuff',  response);
 
 					var converter = new csvToJson.Converter({});
+
+					//record_parsed will be emitted each time a row has been parsed. 
+					converter.on("record_parsed",function(resultRow,rawRow,rowIndex){
+					   // console.log(resultRow); //here is your result json object 
+
+					   if (rowIndex % 1000 === 0) {
+					   		console.log(rowIndex, " thousand");
+					   }
+					});
 
 					converter.fromString(response.text, function(err, result) {
 						self.setState({songs: result});
@@ -37,7 +46,6 @@ var KaraokeApp = React.createClass({
 		superagent
 			.get("./data/songlist.csv")
 			.end(saveCsvToState);
-
 	},
 
 	handleSearchTermChange: function(event) {
@@ -55,13 +63,11 @@ var KaraokeApp = React.createClass({
 				} else {
 					return false;
 				}
-			}
+			};
 
 			return this.state.songs.filter( filterByTerm );
-
-
 		} else {
-			return []
+			return [];
 		}
 	},
 
@@ -72,7 +78,8 @@ var KaraokeApp = React.createClass({
 					searchTerm={this.state.searchTerm}
 					handleSearchTermChange = {this.handleSearchTermChange} />
 
-				<div> number of songs = {this.state.songs.length} </div>
+				<Spinner
+					songCount={this.state.songs.length} />
 
 				<SongList
 					songs={this.getSongs()} />
@@ -80,6 +87,7 @@ var KaraokeApp = React.createClass({
 		);
 	}
 });
+
 
 
 
@@ -101,19 +109,22 @@ var Search = React.createClass({
 
 var SongList = React.createClass({
 	render: function() {
-		var songRows = this.props.songs.map(function(song) {
-			var key = song.SONG + song.ARTIST + song["MF CODE"] + song.TRACK;
-			return (
-				<SongRow key={key}
-						song={song.SONG}
-						artist={song.ARTIST}
-						cd={song["MF CODE"]}
-						track={song.TRACK} />
-			);
 
-		 });
 
-		if (songRows.length>0) {
+		if (this.props.songs.length>0) {
+
+			var songRows = this.props.songs.map(function(song) {
+				var key = song.SONG + song.ARTIST + song["MF CODE"] + song.TRACK;
+				return (
+					<SongRow key={key}
+							song={song.SONG}
+							artist={song.ARTIST}
+							cd={song["MF CODE"]}
+							track={song.TRACK} />
+				);
+
+			 });
+
 			return (
 				<table><tbody>
 					<tr><th>Song</th><th>Artist</th><th>Code</th><th>Track</th></tr>
@@ -139,6 +150,37 @@ var SongRow = React.createClass({
 		);
 	}
 });
+
+
+var Spinner = React.createClass({
+	render:function() {
+		if (this.props.songCount === 0) {
+			return (
+				<div style={{textAlign:"center"}}>
+					<div>
+						Getting song list...
+					</div>
+					<div className="circles-loader">
+						Loading…
+					</div>
+				</div>
+			);
+		} else {
+			return (
+				<div style={{textAlign:"center"}}>
+					Number of songs = {this.props.songCount}
+				</div>
+			);
+		}
+	}
+});
+
+
+
+
+
+
+
 
 
 
