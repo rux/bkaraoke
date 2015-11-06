@@ -7,6 +7,12 @@ module.exports = {
     },
     output: {
         filename: "app/js/[name].js",
+        vendors: [
+            "react",
+            "react-dom",
+            "csvtojson",
+            "superagent"
+        ],
         sourceMapFilename: "app/js/source.js"
     },
     node: { // csv library needs this
@@ -32,5 +38,8 @@ module.exports = {
     resolve: {
         extensions: ['', '.js', '.jsx']
     },
-    devtool: 'sourcemap'
+    plugins: [
+        new webpack.optimize.CommonsChunkPlugin('vendors', 'app/js/vendors.js'),
+        new webpack.optimize.UglifyJsPlugin({minimize: true})
+   	]
 }
