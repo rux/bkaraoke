@@ -1,0 +1,10 @@
+node_modules
+browser-bundle.js
+npm-debug.log
+*~
+lib/*
+!lib/.gitkeep
+sourcemap.map
+source.js
+.DS_Store
+

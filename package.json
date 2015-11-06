@@ -1,0 +1,31 @@
+{
+  "name": "bkaraoke",
+  "version": "0.1.0",
+  "description": "Ben Kelly Karaoke Wonderment",
+  "main": "webpack.conf.js",
+  "dependencies": {
+    "react": "^0.14.0",
+    "react-dom": "^0.14.0",
+    "csvtojson": "^0.4.5",
+    "superagent": "^1.4.0",
+    "webpack": "^1.12.0"
+  },
+  "devDependencies": {
+    "jsx-loader": "^0.13.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-dev": "webpack --config webpack.config.js --progress --colors --watch",
+    "build-production": "NODE_ENV=production webpack -p --config webpack.production.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rux/bkaraoke.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rux/bkaraoke/issues"
+  },
+  "homepage": "https://github.com/rux/bkaraoke#readme"
+}
