@@ -69,8 +69,8 @@ if (($person != "") && ($pick != "") && ($track != "")) {
     <p>Your request for <strong>$pick</strong> is now in the queue!  Get that voice warmed up, you'll be singing in no time!</p>
     <br/><br/><br/><br/><br/><br/><br/>";
 
-    $subject = "🎅 $person 💿 $track 🎤 $pick";
-    $body = <<<HOMSAR
+  $subject = "🎅 $person 💿 $track 🎤 $pick";
+  $body = <<<HOMSAR
 
 <h1>Song Request</h1>
 
@@ -84,13 +84,8 @@ if (($person != "") && ($pick != "") && ($track != "")) {
 <h2>HAPPY SINGING!</h2>
 
 HOMSAR;
-    $headers = 'From: <karaoke@benkelly.com>' . "\r\n";
-    $headers .= 'Content-Type: text/html; charset=UTF-8'. "\r\n";
-
-
-
-  $to = "russ.anderson+karaoke@gmail.com";
-  mail($to,$subject,$body,$headers);
+  $headers = 'From: <karaoke@benkelly.com>' . "\r\n";
+  $headers .= 'Content-Type: text/html; charset=UTF-8'. "\r\n";
 
   
   $to = "monchavo+karaoke@gmail.com";
