@@ -1,7 +1,8 @@
 <?PHP
 
 /* Get the parameters, both GET and POST, from the request */
-$q = $_GET["q"];
+$q = trim($_GET["q"]);
+
 
 $pick = $_POST["pick"];
 $person = $_POST["person"];
