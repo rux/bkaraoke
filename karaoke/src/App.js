@@ -7,7 +7,7 @@ import csv from "csvtojson"
 
 
 function makeKey(song) {
-  // simple hashing to give a textual representation of the
+  // simple hashing to give a string representation, useful for comparisons/filtering
   return song.SONG + song.ARTIST + song["MF CODE"] + song.TRACK;
 }
 
@@ -57,7 +57,7 @@ class SongList extends React.Component{
 
       return (
         <table><tbody>
-          <tr><th>Song</th><th>Artist</th><th>Code</th><th>Track</th><th></th></tr>
+          <tr><th colSpan="2">Song</th><th>Artist</th><th>Code</th><th>Track</th></tr>
           {songRows}
         </tbody></table>
       );
@@ -77,12 +77,12 @@ class SongRow extends React.Component{
   render() {
     const inQueue = this.props.inQueue ? "🎤" : ""
     return (
-      <tr onClick={this.handleClick} >
+      <tr className={inQueue} onClick={this.handleClick} >
+        <td>{inQueue}</td>
         <td>{this.props.song.SONG}</td>
         <td>{this.props.song.ARTIST}</td>
         <td>{this.props.song["MF CODE"]}</td>
         <td>{this.props.song.TRACK}</td>
-        <td>{inQueue}</td>
       </tr>
     );
   }
@@ -169,7 +169,6 @@ class App extends React.Component {
         this.setState({queue: filteredQueue});
      } else {
        // add it in to queue
-       console.log("adding")
        this.setState({queue:[...this.state.queue, song]})
      }
   };

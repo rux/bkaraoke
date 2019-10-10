@@ -32,6 +32,9 @@ th, td {
 }
 
 
+.🎤 td {
+  background-color:#252;
+}
 
 /* this is all for the spinner that doesn't freeze on csv to json conversion */
 
