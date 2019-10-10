@@ -5,9 +5,10 @@
   "dependencies": {
     "react": "^16.10",
     "react-dom": "^16.10",
-    "react-scripts": "3.1",
+    "react-scripts": "3.2",
     "csvtojson": "^2.0",
-    "superagent": "^5.1"
+    "superagent": "^5.1",
+    "firebase": "^7.2"
   },
   "scripts": {
     "start": "react-scripts start",

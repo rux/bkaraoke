@@ -3,11 +3,27 @@ import './App.css';
 import request from "superagent"
 import csv from "csvtojson"
 
+import * as firebase from "firebase/app";
 
-function makeKey(song) {
-  // simple hashing to give a string representation, useful for comparisons/filtering
-  return song.SONG + song.ARTIST + song["MF CODE"] + song.TRACK;
-}
+require("firebase/firestore");
+
+const firebaseConfig = {
+    apiKey: "AIzaSyD0VogSj-okL7lpTl6h2xPmKKT-G84GoJQ",
+    authDomain: "kellykaraoke-70379.firebaseapp.com",
+    databaseURL: "https://kellykaraoke-70379.firebaseio.com",
+    projectId: "kellykaraoke-70379",
+    storageBucket: "kellykaraoke-70379.appspot.com",
+    messagingSenderId: "211700861234",
+    appId: "1:211700861234:web:3e68307f28e5ea2a6e2f2b"
+  };
+firebase.initializeApp(firebaseConfig);
+
+var db = firebase.firestore();
+
+
+
+// simple hashing to give a string representation, useful for comparisons/filtering
+function makeKey(song) { return song.SONG + song.ARTIST + song["MF CODE"] + song.TRACK; }
 
 
 class Spinner extends React.Component {
@@ -21,9 +37,7 @@ class Spinner extends React.Component {
       );
     } else {
       return (
-        <div className="status">
-          {this.props.songCount} songs to choose from
-        </div>
+        <div className="status">{this.props.songCount} songs to choose from</div>
       );
     }
   }
@@ -152,14 +166,21 @@ class App extends React.Component {
   }
 
   handleRowClick = (song) => {
-     const thisKey = makeKey(song)
-     // search the queue - if it's there, kill it and if it's not, add it
-     if (this.state.queue.some(queueEntry => makeKey(queueEntry) === thisKey)) {
-        let filteredQueue = this.state.queue.filter(queueEntry => makeKey(queueEntry) !== thisKey)
-        this.setState({queue: filteredQueue});
-     } else {
-       this.setState({queue:[...this.state.queue, song]})
-     }
+    const key = makeKey(song)
+    // search the queue - if it's there, kill it and if it's not, add it
+    if (this.state.queue.some(queueEntry => makeKey(queueEntry) === key)) {
+      let filteredQueue = this.state.queue.filter(queueEntry => makeKey(queueEntry) !== key)
+      this.setState({queue: filteredQueue});
+
+      // firebase remove this song
+      db.collection("queue").doc(key).delete()
+
+    } else {
+      this.setState({queue:[...this.state.queue, song]})
+
+      // firebase add this song
+      db.collection("queue").doc(key).set(song)
+    }
   };
 
   getSongs() {
