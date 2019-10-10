@@ -1,8 +1,7 @@
 body {
-  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   background-color: #333;
   color:#eee;
-  font-weight:light;
 }
 
 input {
@@ -47,7 +46,7 @@ th, td {
 }
 
 .🎤 td {
-  background-color:#252;
+  background-color:rgba(0, 128, 0, 0.25);
   color:#FFF;
 }
 

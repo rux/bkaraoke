@@ -1,9 +1,7 @@
 import React from 'react';
 import './App.css';
-
 import request from "superagent"
 import csv from "csvtojson"
-
 
 
 function makeKey(song) {
@@ -17,12 +15,8 @@ class Spinner extends React.Component {
     if (this.props.songCount === 0) {
       return (
         <div className="status">
-          <div>
-            Getting song list...
-          </div>
-          <div className="circles-loader">
-            Loading…
-          </div>
+          <div>Getting song list...</div>
+          <div className="circles-loader">Loading…</div>
         </div>
       );
     } else {
@@ -54,7 +48,6 @@ class SongList extends React.Component{
         );
 
       });
-
       return (
         <table><tbody>
           <tr><th colSpan="2">Song</th><th>Artist</th><th>Code</th><th>Track</th></tr>
@@ -69,13 +62,10 @@ class SongList extends React.Component{
 
 
 class SongRow extends React.Component{
-
-  handleClick = () => {
-    this.props.handleRowClick(this.props.song)
-  }
+  handleClick = () => { this.props.handleRowClick(this.props.song); }
 
   render() {
-    const inQueue = this.props.inQueue ? "🎤" : "💿"
+    const inQueue = this.props.inQueue ? "🎤" : "💿";
     return (
       <tr className={inQueue} onClick={this.handleClick} >
         <td>{inQueue}</td>
@@ -98,7 +88,6 @@ class Queue extends React.Component {
         className={showQueueLength}
         onClick={this.props.handleShowQueue}>
         <p>Queued {this.props.queue.length} songs <button className={showQueueButton}>View queue</button></p>
-
       </div>
     );
   }
@@ -132,31 +121,26 @@ class App extends React.Component {
   };
 
   componentDidMount() {
-    console.log("bkaraoke initialised");
-
     request
       .get("./songlist.csv")
       .end((error, response) => {
-              if (error || !response.ok) {
-                console.log("bad request")
-              } else {
-                console.log(response)
-                    const converter = new csv.Converter({});
+        if (error || !response.ok) {
+          console.error("Bad request for songlist.csv")
+        } else {
+          const converter = new csv.Converter({});
+          //record_parsed will be emitted each time a row has been parsed.
+          converter.on("record_parsed",function(resultRow,rawRow,rowIndex){
+             // console.log(resultRow); //here is your result json object
 
-                    //record_parsed will be emitted each time a row has been parsed.
-                    converter.on("record_parsed",function(resultRow,rawRow,rowIndex){
-                       // console.log(resultRow); //here is your result json object
-
-                       if (rowIndex % 1000 === 0) {
-                          console.log(rowIndex, " thousand");
-                       }
-                    });
-
-                    converter
-                      .fromString(response.text)
-                      .then( (jsonObject) => {this.setState({songs: jsonObject})});
-                }
-        });
+             if (rowIndex % 1000 === 0) {
+                console.log(rowIndex, " thousand");
+             }
+          });
+          converter
+            .fromString(response.text)
+            .then( (jsonObject) => {this.setState({songs: jsonObject})});
+        }
+      });
   };
 
   handleSearchTermChange = (event) => {
@@ -174,7 +158,6 @@ class App extends React.Component {
         let filteredQueue = this.state.queue.filter(queueEntry => makeKey(queueEntry) !== thisKey)
         this.setState({queue: filteredQueue});
      } else {
-       // add it in to queue
        this.setState({queue:[...this.state.queue, song]})
      }
   };
@@ -192,7 +175,6 @@ class App extends React.Component {
             return false;
           }
         };
-
         return this.state.songs.filter( filterByTerm );
       } else {
         return [];
@@ -203,23 +185,18 @@ class App extends React.Component {
   };
 
 
-
   render() {
     return (
       <div>
         <Spinner
           songCount={this.state.songs.length} />
-
         <Queue
           mode = {this.state.mode}
           handleShowQueue = {this.handleShowQueue}
           queue={this.state.queue} />
-
         <Search
           searchTerm = {this.state.searchTerm}
           handleSearchTermChange = {this.handleSearchTermChange} />
-
-
         <SongList
           handleRowClick = {this.handleRowClick}
           queue={this.state.queue}
