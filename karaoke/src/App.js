@@ -75,7 +75,7 @@ class SongRow extends React.Component{
   }
 
   render() {
-    const inQueue = this.props.inQueue ? "🎤" : ""
+    const inQueue = this.props.inQueue ? "🎤" : "💿"
     return (
       <tr className={inQueue} onClick={this.handleClick} >
         <td>{inQueue}</td>
