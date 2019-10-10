@@ -28,7 +28,7 @@ class Spinner extends React.Component {
     } else {
       return (
         <div className="status">
-          {this.props.songCount} to choose from
+          {this.props.songCount} songs to choose from
         </div>
       );
     }
@@ -89,12 +89,16 @@ class SongRow extends React.Component{
 };
 
 class Queue extends React.Component {
+
   render() {
+    const showQueueLength = (this.props.queue.length > 0) ? "queue" : "queue hidden";
+    const showQueueButton = (this.props.mode === "queue") ? "hidden" : ""
     return (
       <div
-        className="queue"
+        className={showQueueLength}
         onClick={this.props.handleShowQueue}>
-        Queued {this.props.queue.length} songs
+        <p>Queued {this.props.queue.length} songs <button className={showQueueButton}>View queue</button></p>
+
       </div>
     );
   }
@@ -104,12 +108,14 @@ class Queue extends React.Component {
 class Search extends React.Component {
   render() {
     return(
-      <input
-        name="search"
-        placeholder="song or artist, at least 3 letters"
-        size="32"
-        value={this.props.searchTerm}
-        onChange={this.props.handleSearchTermChange} />
+      <div className="search">
+        <input
+          name="search"
+          placeholder="song or artist, at least 3 letters"
+          size="32"
+          value={this.props.searchTerm}
+          onChange={this.props.handleSearchTermChange} />
+      </div>
     );
   }
 }
@@ -201,7 +207,11 @@ class App extends React.Component {
   render() {
     return (
       <div>
+        <Spinner
+          songCount={this.state.songs.length} />
+
         <Queue
+          mode = {this.state.mode}
           handleShowQueue = {this.handleShowQueue}
           queue={this.state.queue} />
 
@@ -209,8 +219,6 @@ class App extends React.Component {
           searchTerm = {this.state.searchTerm}
           handleSearchTermChange = {this.handleSearchTermChange} />
 
-        <Spinner
-          songCount={this.state.songs.length} />
 
         <SongList
           handleRowClick = {this.handleRowClick}

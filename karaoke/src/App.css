@@ -23,6 +23,8 @@ tr:nth-child(even) {
 th, td {
     font-size: 3vw;
     padding:0.4em;
+
+  transition-duration: 1s;
 }
 
 .status {
@@ -31,9 +33,27 @@ th, td {
     padding:0.4em;
 }
 
+.search {
+  padding: 0.5em 0;
+}
+
+.queue {
+  text-align:center;
+}
+
+.queue button {
+  color:white;
+  background-color:#252;
+}
 
 .🎤 td {
   background-color:#252;
+  font-size:3.2vw;
+  color:#FFF;
+}
+
+.hidden {
+  display:none;
 }
 
 /* this is all for the spinner that doesn't freeze on csv to json conversion */
