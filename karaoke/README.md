@@ -1,3 +1,60 @@
+# Kelly Karaoke
+
+New Version, updated to a more modern react.  To get this up super fast, you need the hosting and the database details setting up in the Google Firebase console.
+
+
+
+
+Things to do to get it working
+
+1 - make sure you have a file called secrets.js in the /src/ directory.  All this needs is contents that look just like this...
+
+export const firebaseConfig={
+  apiKey: "something",
+  authDomain: "blah",
+  databaseURL: "beep",
+  projectId: "bop",
+  storageBucket: "boop",
+  messagingSenderId: "123412341234",
+  appId: "1:1234:web:1234e1234b1234"
+}
+
+This comes from the google firebase admin control panel.
+
+2 - have a dev environment that will let you type
+
+ > yarn start
+
+This will bring up a dev server to test that the above details are all OK.  If that's all dandy, then run
+
+3 - Build it all with
+
+ > yarn build
+
+4 - Put it on the internet with
+
+ > firebase deploy.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Things below here are the create-react-app boilerplate.
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
