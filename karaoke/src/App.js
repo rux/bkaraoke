@@ -125,8 +125,8 @@ class App extends React.Component {
   state = {
     songs:[],
     searchTerm:"",
-    sortBy:"",
     queue:[],
+    queueName:"default-queue",
     mode:"search"
   };
 
@@ -157,13 +157,13 @@ class App extends React.Component {
     this.getQueue();
 
     let that=this;
-    db.collection("queue").onSnapshot(function(querySnapshot) {
+    db.collection(this.state.queueName).onSnapshot(function(querySnapshot) {
       that.getQueue();
     })
   };
 
   getQueue = () => {
-      const fbQueue = db.collection("queue").orderBy("TS", "asc") ;
+      const fbQueue = db.collection(this.state.queueName).orderBy("TS", "asc") ;
       let that=this;
       fbQueue.get().then(function(querySnapshot) {
         const currentQueue = querySnapshot.docs.map((row) => {
@@ -186,21 +186,19 @@ class App extends React.Component {
     // search the queue - if it's there, kill it and if it's not, add it
     const timestamp = Date.now();
 
-
-
     if (this.state.queue.some(queueEntry => makeKey(queueEntry) === key)) {
 
       // let filteredQueue = this.state.queue.filter(queueEntry => makeKey(queueEntry) !== key)
       // this.setState({queue: filteredQueue});
 
       // firebase remove this song
-      db.collection("queue").doc(key).delete().then(this.getQueue)
+      db.collection(this.state.queueName).doc(key).delete().then(this.getQueue)
 
     } else {
       // this.setState({queue:[...this.state.queue, song]})
       song.TS = timestamp;
       // firebase add this song
-      db.collection("queue").doc(key).set(song).then(this.getQueue)
+      db.collection(this.state.queueName).doc(key).set(song).then(this.getQueue)
     }
   };
 
