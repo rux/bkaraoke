@@ -5,17 +5,12 @@ import csv from "csvtojson"
 
 import * as firebase from "firebase/app";
 
+import {firebaseConfig} from "./secrets";
+
 require("firebase/firestore");
 
-const firebaseConfig = {
-    apiKey: "AIzaSyD0VogSj-okL7lpTl6h2xPmKKT-G84GoJQ",
-    authDomain: "kellykaraoke-70379.firebaseapp.com",
-    databaseURL: "https://kellykaraoke-70379.firebaseio.com",
-    projectId: "kellykaraoke-70379",
-    storageBucket: "kellykaraoke-70379.appspot.com",
-    messagingSenderId: "211700861234",
-    appId: "1:211700861234:web:3e68307f28e5ea2a6e2f2b"
-  };
+
+
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
