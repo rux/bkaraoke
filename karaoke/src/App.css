@@ -20,9 +20,8 @@ tr:nth-child(even) {
   background-color:#555;
 }
 th, td {
-    font-size: 3vw;
-    padding:0.4em;
-
+  font-size: 3vw;
+  padding:0.4em;
   transition-duration: 1s;
 }
 
@@ -53,6 +52,21 @@ th, td {
 .hidden {
   display:none;
 }
+
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #111;
+    color: #ddd;
+  }
+  input {
+    background-color:#333;
+    color:#eee;
+  }
+}
+
+
+
 
 /* this is all for the spinner that doesn't freeze on csv to json conversion */
 
