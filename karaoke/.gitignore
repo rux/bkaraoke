@@ -25,4 +25,4 @@ yarn-error.log*
 
 # keep keys for firebase in here
 secrets.js
-.firebase/*
+.firebase
