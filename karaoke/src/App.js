@@ -2,9 +2,7 @@ import React from 'react';
 import './App.css';
 import request from "superagent"
 import csv from "csvtojson"
-
 import * as firebase from "firebase/app";
-
 import {firebaseConfig} from "./secrets";
 
 require("firebase/firestore");
@@ -18,7 +16,10 @@ const db = firebase.firestore();
 
 
 // simple hashing to give a string representation, useful for comparisons/filtering
-function makeKey(song) { return song.SONG + song.ARTIST + song["MF CODE"] + song.TRACK; }
+function makeKey(song) {
+  const concatenation = song.SONG + song.ARTIST + song["MF CODE"] + song.TRACK
+  return concatenation.replace(/\s/g,'');
+}
 
 
 class Spinner extends React.Component {
@@ -129,6 +130,8 @@ class App extends React.Component {
     mode:"search"
   };
 
+
+
   componentDidMount() {
     request
       .get("./songlist.csv")
@@ -150,6 +153,24 @@ class App extends React.Component {
             .then( (jsonObject) => {this.setState({songs: jsonObject})});
         }
       });
+
+    this.getQueue();
+
+    let that=this;
+    db.collection("queue").onSnapshot(function(querySnapshot) {
+      that.getQueue();
+    })
+  };
+
+  getQueue = () => {
+      const fbQueue = db.collection("queue").orderBy("TS", "asc") ;
+      let that=this;
+      fbQueue.get().then(function(querySnapshot) {
+        const currentQueue = querySnapshot.docs.map((row) => {
+          return(row.data())
+        })
+        that.setState({queue: currentQueue})
+      })
   };
 
   handleSearchTermChange = (event) => {
@@ -158,23 +179,28 @@ class App extends React.Component {
 
   handleShowQueue = () => {
     this.setState({mode: "queue", searchTerm: ""})
-  }
+  };
 
   handleRowClick = (song) => {
     const key = makeKey(song)
     // search the queue - if it's there, kill it and if it's not, add it
+    const timestamp = Date.now();
+
+
+
     if (this.state.queue.some(queueEntry => makeKey(queueEntry) === key)) {
-      let filteredQueue = this.state.queue.filter(queueEntry => makeKey(queueEntry) !== key)
-      this.setState({queue: filteredQueue});
+
+      // let filteredQueue = this.state.queue.filter(queueEntry => makeKey(queueEntry) !== key)
+      // this.setState({queue: filteredQueue});
 
       // firebase remove this song
-      db.collection("queue").doc(key).delete()
+      db.collection("queue").doc(key).delete().then(this.getQueue)
 
     } else {
-      this.setState({queue:[...this.state.queue, song]})
-
+      // this.setState({queue:[...this.state.queue, song]})
+      song.TS = timestamp;
       // firebase add this song
-      db.collection("queue").doc(key).set(song)
+      db.collection("queue").doc(key).set(song).then(this.getQueue)
     }
   };
 
