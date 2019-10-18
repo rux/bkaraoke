@@ -61,11 +61,14 @@ class SongList extends React.Component{
 
       });
 
+
       const extraHeaderCells = showAllFields ? <><th>Code</th><th>Track</th></> : null; // Nota Bene odd react tag container!
+// eslint-disable-next-line
+      const lintFix=<></> // fix for sublimetext syntax highlighting!  This does nothing.
 
       return (
         <table className="songList"><tbody>
-          <tr><th colSpan="2">Song</th><th>Artist</th> {extraHeaderCells}</tr>
+          <tr><th colSpan="2">Song</th><th>Artist</th>{extraHeaderCells}</tr>
           {songRows}
         </tbody></table>
       );
