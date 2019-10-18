@@ -13,16 +13,24 @@ table {
   width:100%;
   border-collapse: collapse;
 }
-tr:nth-child(odd) {
+
+
+.songList tr:nth-child(odd) {
   background-color:#444;
 }
-tr:nth-child(even) {
+.songList tr:nth-child(even) {
   background-color:#555;
 }
-th, td {
+.songList th, .songList td {
   font-size: 3vw;
   padding:0.4em;
   transition-duration: 1s;
+}
+
+header button {
+  width:25%;
+  font-size:2vw;
+
 }
 
 .status {
@@ -52,6 +60,31 @@ th, td {
 .hidden {
   display:none;
 }
+
+.letters {
+  width:100%;
+  table-layout: fixed;
+}
+.letters button{
+  font-size: 150%;
+  width:100%;
+}
+
+
+
+
+.songlist tr:nth-child(odd) {
+  background-color:#444;
+}
+.songlist tr:nth-child(even) {
+  background-color:#555;
+}
+.songlist th, .songlist td {
+  font-size: 3vw;
+  padding:0.4em;
+  transition-duration: 1s;
+}
+
 
 
 @media (prefers-color-scheme: dark) {

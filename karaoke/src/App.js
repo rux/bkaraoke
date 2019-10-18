@@ -59,7 +59,7 @@ class SongList extends React.Component{
 
       });
       return (
-        <table><tbody>
+        <table className="songList"><tbody>
           <tr><th colSpan="2">Song</th><th>Artist</th><th>Code</th><th>Track</th></tr>
           {songRows}
         </tbody></table>
@@ -92,12 +92,10 @@ class Queue extends React.Component {
 
   render() {
     const showQueueLength = (this.props.queue.length > 0) ? "queue" : "queue hidden";
-    const showQueueButton = (this.props.mode === "queue") ? "hidden" : ""
     return (
       <div
-        className={showQueueLength}
-        onClick={this.props.handleShowQueue}>
-        <p>Queued {this.props.queue.length} songs <button className={showQueueButton}>View queue</button></p>
+        className={showQueueLength}>
+        <p>Queued {this.props.queue.length} songs</p>
       </div>
     );
   }
@@ -106,15 +104,69 @@ class Queue extends React.Component {
 
 class Search extends React.Component {
   render() {
-    return(
-      <div className="search">
-        <input
-          name="search"
-          placeholder="song or artist, at least 3 letters"
-          size="32"
-          value={this.props.searchTerm}
-          onChange={this.props.handleSearchTermChange} />
-      </div>
+    if (this.props.mode==="search") {
+      return(
+        <div className="search">
+          <input
+            name="search"
+            role="search"
+            placeholder="song or artist, at least 3 letters"
+            size="32"
+            value={this.props.searchTerm}
+            onChange={this.props.handleSearchTermChange} />
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
+}
+
+class Letter extends React.Component {
+  render() {
+    return (
+      <td>
+        <button
+          onClick={this.props.handleBrowse}
+          value={this.props.letter}>
+            {this.props.letter}
+        </button>
+      </td>
+    );
+  }
+}
+
+class Letters extends React.Component {
+  render() {
+    const letters =  '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const letterArray = letters.map((letter) => {
+      return (
+        <Letter key={letter} letter={letter} handleBrowse={this.props.handleBrowse} />
+      )
+    })
+
+    if (this.props.mode.substring(0,6)==="browse") {
+      return (
+        <table className="letters"><tbody><tr>
+          {letterArray}
+        </tr></tbody></table>
+      );
+    } else {
+      return null;
+    }
+  }
+}
+
+
+class Header extends React.Component {
+  render() {
+    return (
+      <header>
+        <button value="browseByArtist" onClick={this.props.handleSetMode}>Browse By Artist</button>
+        <button value="browseBySong" onClick={this.props.handleSetMode}>Browse By Song Name</button>
+        <button value="search" onClick={this.props.handleSetMode}>Search</button>
+        <button value="queue" onClick={this.props.handleSetMode}>See the queue</button>
+      </header>
     );
   }
 }
@@ -125,6 +177,7 @@ class App extends React.Component {
   state = {
     songs:[],
     searchTerm:"",
+    browseLetter:"",
     queue:[],
     queueName:"default-queue",
     mode:"search"
@@ -160,7 +213,7 @@ class App extends React.Component {
     db.collection(this.state.queueName).onSnapshot(function(querySnapshot) {
       that.getQueue();
     })
-  };
+  }
 
   getQueue = () => {
       const fbQueue = db.collection(this.state.queueName).orderBy("TS", "asc") ;
@@ -171,15 +224,21 @@ class App extends React.Component {
         })
         that.setState({queue: currentQueue})
       })
-  };
+  }
 
   handleSearchTermChange = (event) => {
-    this.setState({mode: "search", searchTerm: event.target.value});
-  };
+    this.setState({mode: "search", searchTerm: event.target.value, browseLetter: ""});
+  }
 
-  handleShowQueue = () => {
-    this.setState({mode: "queue", searchTerm: ""})
-  };
+  handleSetMode = (event) => {
+    console.log(event.target.value)
+    this.setState({mode: event.target.value, searchTerm: "", browseLetter: ""})
+  }
+
+  handleBrowse = (event) => {
+    console.log(event.currentTarget.innerHTML)
+    this.setState({browseLetter: event.currentTarget.innerHTML})
+  }
 
   handleRowClick = (song) => {
     const key = makeKey(song)
@@ -205,8 +264,8 @@ class App extends React.Component {
   getSongs() {
     if (this.state.mode === "search") {
       if (this.state.searchTerm.length >= 3) {
-        var searchRegExp = new RegExp(this.state.searchTerm, "i");
-        var filterByTerm = function(song) {
+        const searchRegExp = new RegExp("\\b" + this.state.searchTerm, "i");
+        const filterByTerm = function(song) {
           if (song.ARTIST.toString().match(searchRegExp)) {
             return true;
           } else if (song.SONG.toString().match(searchRegExp)) {
@@ -219,28 +278,40 @@ class App extends React.Component {
       } else {
         return [];
       }
+    } else if (this.state.mode === "browseBySong") {
+      return this.state.songs.filter(song => song.SONG.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
+    } else if (this.state.mode === "browseByArtist") {
+      return this.state.songs.filter(song => song.ARTIST.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
     } else if (this.state.mode === "queue") {
       return this.state.queue;
     }
   };
 
 
+
   render() {
     return (
       <div>
+        <Header
+          mode={this.state.mode}
+          handleSetMode={this.handleSetMode}/>
         <Spinner
           songCount={this.state.songs.length} />
         <Queue
           mode = {this.state.mode}
-          handleShowQueue = {this.handleShowQueue}
           queue={this.state.queue} />
         <Search
+          mode = {this.state.mode}
           searchTerm = {this.state.searchTerm}
           handleSearchTermChange = {this.handleSearchTermChange} />
+        <Letters
+          mode = {this.state.mode}
+          handleBrowse={this.handleBrowse} />
         <SongList
           handleRowClick = {this.handleRowClick}
           queue={this.state.queue}
           songs={this.getSongs()} />
+        
       </div>
     );
   }
