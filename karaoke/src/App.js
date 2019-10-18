@@ -181,10 +181,10 @@ class Header extends React.Component {
   render() {
     return (
       <header>
-        <button value="browseByArtist" onClick={this.props.handleSetMode}>Browse By Artist</button>
-        <button value="browseBySong" onClick={this.props.handleSetMode}>Browse By Song Name</button>
+        <button value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
+        <button value="browseBySong" onClick={this.props.handleSetMode}>Song Names</button>
         <button value="search" onClick={this.props.handleSetMode}>Search</button>
-        <button value="queue" onClick={this.props.handleSetMode}>See the queue</button>
+        <button value="queue" onClick={this.props.handleSetMode}>Queue</button>
       </header>
     );
   }

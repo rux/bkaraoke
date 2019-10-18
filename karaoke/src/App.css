@@ -34,7 +34,7 @@ table {
 header button {
   width:25%;
   font-size:2vw;
-
+  padding:0.2em;
 }
 
 .status {
@@ -104,6 +104,12 @@ header button {
   }
   .songList tr:nth-child(even) {
     background-color:#444;
+  }
+
+  button {
+    color:#ddd;
+    background-color: #222;
+    border-color:#444;
   }
 }
 
