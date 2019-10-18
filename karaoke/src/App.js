@@ -250,12 +250,10 @@ class App extends React.Component {
   }
 
   handleSetMode = (event) => {
-    console.log(event.target.value)
     this.setState({mode: event.target.value, searchTerm: "", browseLetter: ""})
   }
 
   handleBrowse = (event) => {
-    console.log(event.currentTarget.value)
     this.setState({browseLetter: event.currentTarget.value})
   }
 
