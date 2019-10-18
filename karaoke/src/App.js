@@ -236,8 +236,8 @@ class App extends React.Component {
   }
 
   handleBrowse = (event) => {
-    console.log(event.currentTarget.innerHTML)
-    this.setState({browseLetter: event.currentTarget.innerHTML})
+    console.log(event.currentTarget.value)
+    this.setState({browseLetter: event.currentTarget.value})
   }
 
   handleRowClick = (song) => {
@@ -281,7 +281,10 @@ class App extends React.Component {
     } else if (this.state.mode === "browseBySong") {
       return this.state.songs.filter(song => song.SONG.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
     } else if (this.state.mode === "browseByArtist") {
-      return this.state.songs.filter(song => song.ARTIST.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
+      // csv is sorted by song title, we need to make a copy to sort by artist so we
+      // do not interfere with the react state object
+      const songs = this.state.songs.filter(song => song.ARTIST.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
+      return [...songs].sort((a,b) => a.ARTIST.localeCompare(b.ARTIST));
     } else if (this.state.mode === "queue") {
       return this.state.queue;
     }

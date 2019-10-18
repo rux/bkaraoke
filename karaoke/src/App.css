@@ -22,7 +22,7 @@ table {
   background-color:#555;
 }
 .songList th, .songList td {
-  font-size: 3vw;
+  font-size: 2.5vw;
   padding:0.4em;
   transition-duration: 1s;
 }
