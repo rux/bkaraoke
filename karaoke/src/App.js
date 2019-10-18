@@ -45,6 +45,7 @@ class Spinner extends React.Component {
 class SongList extends React.Component{
 
   render() {
+    const showAllFields = (this.props.mode==="queue") ? true : false
     if (this.props.songs.length>0) {
       const songRows = this.props.songs.map((song) => {
         const key = makeKey(song);
@@ -54,13 +55,17 @@ class SongList extends React.Component{
               handleRowClick ={ this.props.handleRowClick }
               song={song}
               inQueue={inQueue}
+              showAllFields={showAllFields}
               key={key} />
         );
 
       });
+
+      const extraHeaderCells = showAllFields ? <><th>Code</th><th>Track</th></> : null; // Nota Bene odd react tag container!
+
       return (
         <table className="songList"><tbody>
-          <tr><th colSpan="2">Song</th><th>Artist</th><th>Code</th><th>Track</th></tr>
+          <tr><th colSpan="2">Song</th><th>Artist</th> {extraHeaderCells}</tr>
           {songRows}
         </tbody></table>
       );
@@ -76,15 +81,26 @@ class SongRow extends React.Component{
 
   render() {
     const inQueue = this.props.inQueue ? "🎤" : "💿";
-    return (
-      <tr className={inQueue} onClick={this.handleClick} >
-        <td>{inQueue}</td>
-        <td>{this.props.song.SONG}</td>
-        <td>{this.props.song.ARTIST}</td>
-        <td>{this.props.song["MF CODE"]}</td>
-        <td>{this.props.song.TRACK}</td>
-      </tr>
-    );
+    if (this.props.showAllFields) {
+      return (
+        <tr className={inQueue} onClick={this.handleClick} >
+          <td>{inQueue}</td>
+          <td>{this.props.song.SONG}</td>
+          <td>{this.props.song.ARTIST}</td>
+          <td>{this.props.song["MF CODE"]}</td>
+          <td>{this.props.song.TRACK}</td>
+        </tr>
+      )
+    } else {
+      return (
+        <tr className={inQueue} onClick={this.handleClick} >
+          <td>{inQueue}</td>
+          <td>{this.props.song.SONG}</td>
+          <td>{this.props.song.ARTIST}</td>
+        </tr>
+      )
+    }
+
   }
 };
 
@@ -311,6 +327,7 @@ class App extends React.Component {
           mode = {this.state.mode}
           handleBrowse={this.handleBrowse} />
         <SongList
+          mode={this.state.mode}
           handleRowClick = {this.handleRowClick}
           queue={this.state.queue}
           songs={this.getSongs()} />
