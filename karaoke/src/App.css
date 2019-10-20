@@ -20,6 +20,23 @@ table {
   border-collapse: collapse;
 }
 
+button {
+  color:#333;
+  background-color: #ccc;
+  border-color:#aaa;
+}
+
+header button {
+  width:25%;
+  font-size:115%;
+  padding:0.2em;
+
+  -webkit-appearance: none;
+  border-radius: 0;
+}
+
+
+
 
 .songList tr:nth-child(odd) {
   background-color:#ddd;
@@ -28,26 +45,10 @@ table {
   background-color:#ccc;
 }
 .songList th, .songList td {
-  font-size: 2.5vw;
   padding:0.4em;
   transition-duration: 1s;
 }
 
-header button {
-  width:25%;
-  font-size:150%;
-  padding:0.2em;
-
-  -webkit-appearance: none;
-  border-radius: 0;
-}
-
-
-  button {
-    color:#333;
-    background-color: #ccc;
-    border-color:#aaa;
-  }
 
 .status {
   color:#888;
@@ -127,6 +128,10 @@ header button {
     border-color:#444;
   }
 }
+
+
+
+
 
 
 

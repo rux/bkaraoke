@@ -24,7 +24,7 @@ function makeKey(song) {
 
 class Spinner extends React.Component {
   render() {
-    if (this.props.songCount === 0) {
+    if (this.props.songsTotalCount === 0) {
       return (
         <div className="status">
           <div>Getting song list...</div>
@@ -33,7 +33,7 @@ class Spinner extends React.Component {
       );
     } else {
       return (
-        <div className="status">{this.props.songCount} songs to choose from</div>
+        <div className="status">{this.props.songsTotalCount} songs to choose from</div>
       );
     }
   }
@@ -129,7 +129,7 @@ class Search extends React.Component {
           <input
             name="search"
             role="search"
-            placeholder="song or artist, at least 3 letters"
+            placeholder="Search song or artist, at least 3 letters"
             size="32"
             value={this.props.searchTerm}
             onChange={this.props.handleSearchTermChange} />
@@ -177,8 +177,14 @@ class Letters extends React.Component {
 
 class Header extends React.Component {
   render() {
+    // only show title chrome if the user hasn't done anything
     const showTitle = (this.props.songListCount === 0) ? "" : "hidden";
-    const queueLength = (this.props.queue.length > 0) ? " (" + this.props.queue.length + ")" : null;
+
+    const MAX_QUEUE = 99
+    const oversizedQueue = (this.props.queueCount > MAX_QUEUE) ? "+" : "";
+    const limitedQueueCount = (this.props.queueCount > MAX_QUEUE) ? MAX_QUEUE : this.props.queueCount;
+    const queueLength = (limitedQueueCount > 0) ? "\u00A0(" + limitedQueueCount + oversizedQueue +")" : null;
+    
     return (
       <header>
         <button value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
@@ -190,7 +196,7 @@ class Header extends React.Component {
         </h1>
         <div className={showTitle}>
           <Spinner
-            songCount={this.props.songCount} />
+            songsTotalCount={this.props.songsTotalCount} />
         </div>
       </header>
     );
@@ -325,9 +331,9 @@ class App extends React.Component {
         <Header
           mode={this.state.mode}
           handleSetMode={this.handleSetMode}
-          songCount={this.state.songs.length}
+          songsTotalCount={this.state.songs.length}
           songListCount={songsToList.length}
-          queue={this.state.queue} />
+          queueCount={this.state.queue.length} />
         <Queue
           mode = {this.state.mode}
           queue={this.state.queue} />
