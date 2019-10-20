@@ -5,6 +5,8 @@ body {
 }
 
 h1 {
+  text-align:center;
+  width:100%;
   font-weight:normal;
 }
 
@@ -33,9 +35,19 @@ table {
 
 header button {
   width:25%;
-  font-size:2vw;
+  font-size:150%;
   padding:0.2em;
+
+  -webkit-appearance: none;
+  border-radius: 0;
 }
+
+
+  button {
+    color:#333;
+    background-color: #ccc;
+    border-color:#aaa;
+  }
 
 .status {
   color:#888;
@@ -65,12 +77,15 @@ header button {
 }
 
 .letters {
-  width:100%;
-  table-layout: fixed;
+  display:flex;
+  justify-content:center;
+  flex-wrap: wrap;
+  margin:0.5em 1em;
 }
 .letters button{
-  font-size: 150%;
-  width:100%;
+  /*flex: 1;*/
+  font-size: 120%;
+  margin:2px;
 }
 
 

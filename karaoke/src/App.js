@@ -144,13 +144,11 @@ class Search extends React.Component {
 class Letter extends React.Component {
   render() {
     return (
-      <td>
-        <button
-          onClick={this.props.handleBrowse}
-          value={this.props.letter}>
-            {this.props.letter}
-        </button>
-      </td>
+      <button
+        onClick={this.props.handleBrowse}
+        value={this.props.letter}>
+          {this.props.letter}
+      </button>
     );
   }
 }
@@ -166,9 +164,9 @@ class Letters extends React.Component {
 
     if (this.props.mode.substring(0,6)==="browse") {
       return (
-        <table className="letters"><tbody><tr>
+        <div className="letters">
           {letterArray}
-        </tr></tbody></table>
+        </div>
       );
     } else {
       return null;
@@ -181,8 +179,9 @@ class Header extends React.Component {
   render() {
     return (
       <header>
+        <h1>Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder</h1>
         <button value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
-        <button value="browseBySong" onClick={this.props.handleSetMode}>Song Names</button>
+        <button value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
         <button value="search" onClick={this.props.handleSetMode}>Search</button>
         <button value="queue" onClick={this.props.handleSetMode}>Queue</button>
       </header>
