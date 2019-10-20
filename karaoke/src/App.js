@@ -110,11 +110,11 @@ class SongRow extends React.Component{
 class Queue extends React.Component {
 
   render() {
-    const showQueueLength = (this.props.queue.length > 0) ? "queue" : "queue hidden";
+    const showQueueLength = (this.props.mode === "queue") ? "queue" : "queue hidden";
     return (
       <div
         className={showQueueLength}>
-        <p>Queued {this.props.queue.length} songs</p>
+        <p>Queued {this.props.queue.length} songs.  Click on a song to remove it from the queue</p>
       </div>
     );
   }
@@ -177,13 +177,21 @@ class Letters extends React.Component {
 
 class Header extends React.Component {
   render() {
+    const showTitle = (this.props.songListCount === 0) ? "" : "hidden";
+    const queueLength = (this.props.queue.length > 0) ? " (" + this.props.queue.length + ")" : null;
     return (
       <header>
-        <h1>Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder</h1>
         <button value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
         <button value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
         <button value="search" onClick={this.props.handleSetMode}>Search</button>
-        <button value="queue" onClick={this.props.handleSetMode}>Queue</button>
+        <button value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
+        <h1 className={showTitle}>
+          Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
+        </h1>
+        <div className={showTitle}>
+          <Spinner
+            songCount={this.props.songCount} />
+        </div>
       </header>
     );
   }
@@ -309,13 +317,17 @@ class App extends React.Component {
 
 
   render() {
+
+    const songsToList = this.getSongs();
+
     return (
       <div>
         <Header
           mode={this.state.mode}
-          handleSetMode={this.handleSetMode}/>
-        <Spinner
-          songCount={this.state.songs.length} />
+          handleSetMode={this.handleSetMode}
+          songCount={this.state.songs.length}
+          songListCount={songsToList.length}
+          queue={this.state.queue} />
         <Queue
           mode = {this.state.mode}
           queue={this.state.queue} />
@@ -330,7 +342,7 @@ class App extends React.Component {
           mode={this.state.mode}
           handleRowClick = {this.handleRowClick}
           queue={this.state.queue}
-          songs={this.getSongs()} />
+          songs={songsToList} />
         
       </div>
     );
