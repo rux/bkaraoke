@@ -73,7 +73,8 @@ button.highlight{
 }
 
 .🎤 td {
-  background-color:rgba(0, 128, 0, 0.35);
+  background-color:rgba(153, 170, 255, 0.35);
+  color:#000;
 }
 
 .hidden {
@@ -132,14 +133,18 @@ button.highlight{
   }
 
   button.highlight {
-    background-color:#226
+    background-color:#D08
   }
 
+  .🎤 td {
+    background-color:rgba(221, 0, 136, 0.25);
+  color:#FFF;
+  }
 }
 
 
 
-
+rgb(212, 0, 134)
 
 
 
