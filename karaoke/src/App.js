@@ -111,10 +111,12 @@ class Queue extends React.Component {
 
   render() {
     const showQueueLength = (this.props.mode === "queue") ? "queue" : "queue hidden";
+    const showInstructions = (this.props.queue.length > 0) ? "" : "hidden"
     return (
       <div
         className={showQueueLength}>
-        <p>Queued {this.props.queue.length} songs.  Click on a song to remove it from the queue</p>
+        <p>Queued {this.props.queue.length} songs.</p>
+        <p className={showInstructions}>Click on a song to remove it from the queue</p>
       </div>
     );
   }
@@ -143,8 +145,10 @@ class Search extends React.Component {
 
 class Letter extends React.Component {
   render() {
+    const highlight = (this.props.browseLetter === this.props.letter) ? "highlight" : "";
     return (
       <button
+        className={highlight}
         onClick={this.props.handleBrowse}
         value={this.props.letter}>
           {this.props.letter}
@@ -158,7 +162,7 @@ class Letters extends React.Component {
     const letters =  '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
     const letterArray = letters.map((letter) => {
       return (
-        <Letter key={letter} letter={letter} handleBrowse={this.props.handleBrowse} />
+        <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
       )
     })
 
@@ -185,12 +189,19 @@ class Header extends React.Component {
     const limitedQueueCount = (this.props.queueCount > MAX_QUEUE) ? MAX_QUEUE : this.props.queueCount;
     const queueLength = (limitedQueueCount > 0) ? "\u00A0(" + limitedQueueCount + oversizedQueue +")" : null;
     
+    function setHighlight(mode) {
+        const o = new Object;
+        o[mode] = "highlight"
+        return o 
+    }
+    const highlight=setHighlight(this.props.mode);
+    
     return (
       <header>
-        <button value="search" onClick={this.props.handleSetMode}>Search</button>
-        <button value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
-        <button value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
-        <button value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
+        <button className={highlight.search} value="search" onClick={this.props.handleSetMode}>Search</button>
+        <button className={highlight.browseByArtist} value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
+        <button className={highlight.browseBySong} value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
+        <button className={highlight.queue} value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
         <h1 className={showTitle}>
           Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
         </h1>
@@ -343,6 +354,7 @@ class App extends React.Component {
           handleSearchTermChange = {this.handleSearchTermChange} />
         <Letters
           mode = {this.state.mode}
+          browseLetter = {this.state.browseLetter}
           handleBrowse={this.handleBrowse} />
         <SongList
           mode={this.state.mode}

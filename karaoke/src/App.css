@@ -35,6 +35,9 @@ header button {
   border-radius: 0;
 }
 
+button.highlight{
+	background-color:#9af
+}
 
 
 
@@ -127,6 +130,11 @@ header button {
     background-color: #222;
     border-color:#444;
   }
+
+  button.highlight {
+    background-color:#226
+  }
+
 }
 
 
