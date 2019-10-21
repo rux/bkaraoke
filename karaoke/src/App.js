@@ -188,14 +188,14 @@ class Header extends React.Component {
     const oversizedQueue = (this.props.queueCount > MAX_QUEUE) ? "+" : "";
     const limitedQueueCount = (this.props.queueCount > MAX_QUEUE) ? MAX_QUEUE : this.props.queueCount;
     const queueLength = (limitedQueueCount > 0) ? "\u00A0(" + limitedQueueCount + oversizedQueue +")" : null;
-    
+
     function setHighlight(mode) {
-        const o = new Object;
+        const o = {};
         o[mode] = "highlight"
-        return o 
+        return o;
     }
     const highlight=setHighlight(this.props.mode);
-    
+
     return (
       <header>
         <button className={highlight.search} value="search" onClick={this.props.handleSetMode}>Search</button>
@@ -361,7 +361,7 @@ class App extends React.Component {
           handleRowClick = {this.handleRowClick}
           queue={this.state.queue}
           songs={songsToList} />
-        
+
       </div>
     );
   }
