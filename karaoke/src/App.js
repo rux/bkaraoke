@@ -187,9 +187,9 @@ class Header extends React.Component {
     
     return (
       <header>
+        <button value="search" onClick={this.props.handleSetMode}>Search</button>
         <button value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
         <button value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
-        <button value="search" onClick={this.props.handleSetMode}>Search</button>
         <button value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
         <h1 className={showTitle}>
           Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
