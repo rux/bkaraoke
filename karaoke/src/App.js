@@ -313,15 +313,11 @@ class App extends React.Component {
     const timestamp = Date.now();
 
     if (this.state.queue.some(queueEntry => makeKey(queueEntry) === key)) {
-
-      // let filteredQueue = this.state.queue.filter(queueEntry => makeKey(queueEntry) !== key)
-      // this.setState({queue: filteredQueue});
-
-      // firebase remove this song
-      db.collection(this.state.queueName).doc(key).delete().then(this.getQueue)
-
+      if (window.confirm("Delete '" + song.SONG + "' from the queue?")) {
+        // firebase remove this song
+        db.collection(this.state.queueName).doc(key).delete().then(this.getQueue)
+      }
     } else {
-      // this.setState({queue:[...this.state.queue, song]})
       song.TS = timestamp;
       // firebase add this song
       db.collection(this.state.queueName).doc(key).set(song).then(this.getQueue)
