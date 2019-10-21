@@ -44,6 +44,13 @@ class Spinner extends React.Component {
 
 class SongList extends React.Component{
 
+
+  handleSetSortBy = (event) => {
+    const sortBy = event.target.id;
+    this.props.handleSetSortBy(sortBy)
+  }
+
+
   render() {
     const showAllFields = (this.props.mode==="queue") ? true : false
     if (this.props.songs.length>0) {
@@ -58,17 +65,24 @@ class SongList extends React.Component{
               showAllFields={showAllFields}
               key={key} />
         );
-
       });
-
 
       const extraHeaderCells = showAllFields ? <><th>Code</th><th>Track</th></> : null; // Nota Bene odd react tag container!
 // eslint-disable-next-line
       const lintFix=<></> // fix for sublimetext syntax highlighting!  This does nothing.
 
+      console.log(this.props.sortBy)
+      console.log(this.props.mode)
+      const sortedBySong = ((this.props.mode !== "queue") && (this.props.sortBy === "SONG")) ? " ▼" : "";
+      const sortedByArtist = ((this.props.mode !== "queue") && (this.props.sortBy === "ARTIST")) ? " ▼" : "";
+
       return (
         <table className="songList"><tbody>
-          <tr><th colSpan="2">Song</th><th>Artist</th>{extraHeaderCells}</tr>
+          <tr>
+            <th colSpan="2" id="SONG" onClick={this.handleSetSortBy}>Song{sortedBySong}</th>
+            <th id="ARTIST" onClick={this.handleSetSortBy}>Artist{sortedByArtist}</th>
+            {extraHeaderCells}
+          </tr>
           {songRows}
         </tbody></table>
       );
@@ -180,6 +194,13 @@ class Letters extends React.Component {
 
 
 class Header extends React.Component {
+
+  setHighlight = (mode) => {
+        const o = {};
+        o[mode] = "highlight"
+        return o;
+  }
+
   render() {
     // only show title chrome if the user hasn't done anything
     const showTitle = (this.props.songListCount === 0) ? "" : "hidden";
@@ -189,12 +210,8 @@ class Header extends React.Component {
     const limitedQueueCount = (this.props.queueCount > MAX_QUEUE) ? MAX_QUEUE : this.props.queueCount;
     const queueLength = (limitedQueueCount > 0) ? "\u00A0(" + limitedQueueCount + oversizedQueue +")" : null;
 
-    function setHighlight(mode) {
-        const o = {};
-        o[mode] = "highlight"
-        return o;
-    }
-    const highlight=setHighlight(this.props.mode);
+
+    const highlight=this.setHighlight(this.props.mode);
 
     return (
       <header>
@@ -223,7 +240,8 @@ class App extends React.Component {
     browseLetter:"",
     queue:[],
     queueName:"default-queue",
-    mode:"search"
+    mode:"search",
+    sortBy:"SONG"
   };
 
 
@@ -273,8 +291,16 @@ class App extends React.Component {
     this.setState({mode: "search", searchTerm: event.target.value, browseLetter: ""});
   }
 
+
+  handleSetSortBy = (sortBy) => {
+    this.setState({sortBy: sortBy})
+  }
+
   handleSetMode = (event) => {
-    this.setState({mode: event.target.value, searchTerm: "", browseLetter: ""})
+    const mode = event.target.value;
+    if (mode === "browseByArtist") {this.handleSetSortBy("ARTIST")}
+    if (mode === "browseBySong") {this.handleSetSortBy("SONG")}
+    this.setState({mode: mode, searchTerm: "", browseLetter: ""})
   }
 
   handleBrowse = (event) => {
@@ -315,17 +341,20 @@ class App extends React.Component {
             return false;
           }
         };
-        return this.state.songs.filter( filterByTerm );
+        const songs = this.state.songs.filter( filterByTerm );
+        return [...songs].sort((a,b) => a[this.state.sortBy].localeCompare(b[this.state.sortBy]));
+
       } else {
         return [];
       }
     } else if (this.state.mode === "browseBySong") {
-      return this.state.songs.filter(song => song.SONG.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
+      const songs = this.state.songs.filter(song => song.SONG.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
+      return [...songs].sort((a,b) => a[this.state.sortBy].localeCompare(b[this.state.sortBy]));
     } else if (this.state.mode === "browseByArtist") {
       // csv is sorted by song title, we need to make a copy to sort by artist so we
       // do not interfere with the react state object
       const songs = this.state.songs.filter(song => song.ARTIST.substring(0,1).toUpperCase() === this.state.browseLetter.toUpperCase())
-      return [...songs].sort((a,b) => a.ARTIST.localeCompare(b.ARTIST));
+      return [...songs].sort((a,b) => a[this.state.sortBy].localeCompare(b[this.state.sortBy]));
     } else if (this.state.mode === "queue") {
       return this.state.queue;
     }
@@ -358,7 +387,9 @@ class App extends React.Component {
           handleBrowse={this.handleBrowse} />
         <SongList
           mode={this.state.mode}
+          sortBy={this.state.sortBy}
           handleRowClick = {this.handleRowClick}
+          handleSetSortBy = {this.handleSetSortBy}
           queue={this.state.queue}
           songs={songsToList} />
 
