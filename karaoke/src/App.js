@@ -176,32 +176,42 @@ class Letter extends React.Component {
 
 class Letters extends React.Component {
   render() {
-    const letters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-    const numbers =  '1234567890'.split('');
-    const letterArray = letters.map((letter) => {
-      return (
-        <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
-      )
-    })
-    const numberArray = numbers.map((letter) => {
-      return (
-        <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
-      )
-    })
 
-    if (this.props.mode.substring(0,6)==="browse") {
+    if (this.props.songListCount > 0) {
       return (
-        <div>
           <div className="letters">
-            {letterArray}
+            <button  letter="" onClick={this.props.handleBrowse} >← Back</button>
           </div>
-          <div className="letters">
-            {numberArray}
-          </div>
-        </div>
-      );
+        )
     } else {
-      return null;
+
+      const letters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+      const numbers =  '1234567890'.split('');
+      const letterArray = letters.map((letter) => {
+        return (
+          <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
+        )
+      })
+      const numberArray = numbers.map((letter) => {
+        return (
+          <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
+        )
+      })
+
+      if (this.props.mode.substring(0,6)==="browse") {
+        return (
+          <div>
+            <div className="letters">
+              {letterArray}
+            </div>
+            <div className="letters">
+              {numberArray}
+            </div>
+          </div>
+        );
+      } else {
+        return null;
+      }
     }
   }
 }
@@ -394,6 +404,7 @@ class App extends React.Component {
         <Letters
           mode = {this.state.mode}
           browseLetter = {this.state.browseLetter}
+          songListCount={songsToList.length}
           handleBrowse={this.handleBrowse} />
         <SongList
           mode={this.state.mode}
