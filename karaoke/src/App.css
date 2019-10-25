@@ -29,7 +29,7 @@ button {
 header button {
   width:25%;
   font-size:115%;
-  padding:0.2em;
+  padding:0.6em 0.2em;
 
   -webkit-appearance: none;
   border-radius: 0;
@@ -88,9 +88,11 @@ button.highlight{
   margin:0.5em 1em;
 }
 .letters button{
-  /*flex: 1;*/
-  font-size: 120%;
-  margin:2px;
+  min-width:1em;
+  font-size: 200%;
+  margin:5px;
+  padding:5px;
+  border-radius:5px;
 }
 
 

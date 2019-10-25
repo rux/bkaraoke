@@ -71,10 +71,13 @@ class SongList extends React.Component{
 // eslint-disable-next-line
       const lintFix=<></> // fix for sublimetext syntax highlighting!  This does nothing.
 
-      console.log(this.props.sortBy)
-      console.log(this.props.mode)
-      const sortedBySong = ((this.props.mode !== "queue") && (this.props.sortBy === "SONG")) ? " ▼" : "";
-      const sortedByArtist = ((this.props.mode !== "queue") && (this.props.sortBy === "ARTIST")) ? " ▼" : "";
+      let sortedBySong, sortedByArtist;
+
+      if (this.props.mode !== "queue") {
+        sortedBySong =  (this.props.sortBy === "SONG") ? " ▾" : " ▿";
+        sortedByArtist =  (this.props.sortBy === "ARTIST") ? " ▾" : " ▿";
+      }
+
 
       return (
         <table className="songList"><tbody>
@@ -173,8 +176,14 @@ class Letter extends React.Component {
 
 class Letters extends React.Component {
   render() {
-    const letters =  '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const letters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+    const numbers =  '1234567890'.split('');
     const letterArray = letters.map((letter) => {
+      return (
+        <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
+      )
+    })
+    const numberArray = numbers.map((letter) => {
       return (
         <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
       )
@@ -182,8 +191,13 @@ class Letters extends React.Component {
 
     if (this.props.mode.substring(0,6)==="browse") {
       return (
-        <div className="letters">
-          {letterArray}
+        <div>
+          <div className="letters">
+            {letterArray}
+          </div>
+          <div className="letters">
+            {numberArray}
+          </div>
         </div>
       );
     } else {
