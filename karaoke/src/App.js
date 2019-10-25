@@ -177,13 +177,14 @@ class Letter extends React.Component {
 class Letters extends React.Component {
   render() {
 
-    if (this.props.songListCount > 0) {
-      return (
-          <div className="letters">
-            <button  letter="" onClick={this.props.handleBrowse} >← Back</button>
-          </div>
-        )
-    } else {
+    if (this.props.mode.substring(0,6)==="browse") {
+      if (this.props.songListCount > 0) {
+        return (
+            <div className="letters">
+              <button  letter="" onClick={this.props.handleBrowse} >← Back</button>
+            </div>
+          )
+      } else {
 
       const letters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
       const numbers =  '1234567890'.split('');
@@ -198,7 +199,6 @@ class Letters extends React.Component {
         )
       })
 
-      if (this.props.mode.substring(0,6)==="browse") {
         return (
           <div>
             <div className="letters">
@@ -209,9 +209,9 @@ class Letters extends React.Component {
             </div>
           </div>
         );
-      } else {
-        return null;
       }
+    } else {
+      return null;
     }
   }
 }
