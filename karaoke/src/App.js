@@ -239,10 +239,12 @@ class Header extends React.Component {
 
     return (
       <header>
-        <button className={highlight.search} value="search" onClick={this.props.handleSetMode}>Search</button>
-        <button className={highlight.browseByArtist} value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
-        <button className={highlight.browseBySong} value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
-        <button className={highlight.queue} value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
+        <nav>
+          <button className={highlight.search} value="search" onClick={this.props.handleSetMode}>Search</button>
+          <button className={highlight.browseByArtist} value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
+          <button className={highlight.browseBySong} value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
+          <button className={highlight.queue} value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
+        </nav>
         <h1 className={showTitle}>
           Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
         </h1>
