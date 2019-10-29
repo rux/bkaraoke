@@ -74,8 +74,8 @@ class SongList extends React.Component{
       let sortedBySong, sortedByArtist;
 
       if (this.props.mode !== "queue") {
-        sortedBySong =  (this.props.sortBy === "SONG") ? " ▾" : " ▿";
-        sortedByArtist =  (this.props.sortBy === "ARTIST") ? " ▾" : " ▿";
+        sortedBySong =  (this.props.sortBy === "SONG") ? " ▼" : " ▿";
+        sortedByArtist =  (this.props.sortBy === "ARTIST") ? " ▼" : " ▿";
       }
 
 
