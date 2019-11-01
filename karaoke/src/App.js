@@ -67,7 +67,7 @@ class Title extends React.Component {
     if (this.props.display) {
       return (
         <h1 className={this.props.showTitle}>
-          Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
+          Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Songbook
         </h1>
       );
     } else return null;
@@ -404,7 +404,12 @@ class App extends React.Component {
     const timestamp = Date.now();
 
     if (this.state.queue.some(queueEntry => makeKey(queueEntry) === key)) {
-      if (window.confirm("Delete '" + song.SONG + "' from the queue?")) {
+      const question = ((undefined === song.SINGERNAME) || (this.state.singerName === song.SINGERNAME))
+        ? "Delete '" + song.SONG + "' from the queue?"
+        : "Delete '" + song.SONG + "' from the queue?\n\n⚠️ You did not add this song, this was added by " + song.SINGERNAME
+
+
+      if (window.confirm(question)) {
         // firebase remove this song
         db.collection(this.state.queueName).doc(key).delete().then(this.getQueue)
       }
