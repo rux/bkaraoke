@@ -33,7 +33,7 @@ class Header extends React.Component {
 
   render() {
     // only show title chrome if the user hasn't done anything
-    const showTitle = (this.props.songListCount === 0) ? "" : "hidden";
+    const showTitle = (this.props.songListCount === 0) ? true : false;
 
     const MAX_QUEUE = 99
     const oversizedQueue = (this.props.queueCount > MAX_QUEUE) ? "+" : "";
@@ -51,13 +51,10 @@ class Header extends React.Component {
           <button className={highlight.browseBySong} value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
           <button className={highlight.queue} value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
         </nav>
-        <h1 className={showTitle}>
-          Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
-        </h1>
-        <div className={showTitle}>
-          <Spinner
+        <Title display={showTitle} />
+        <Spinner
+            display={showTitle}
             songsTotalCount={this.props.songsTotalCount} />
-        </div>
       </header>
     );
   }
@@ -65,20 +62,37 @@ class Header extends React.Component {
 
 
 
+class Title extends React.Component {
+  render() {
+    if (this.props.display) {
+      return (
+        <h1 className={this.props.showTitle}>
+          Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
+        </h1>
+      );
+    } else return null;
+  }
+};
+
+
+
+
 class Spinner extends React.Component {
   render() {
-    if (this.props.songsTotalCount === 0) {
-      return (
-        <div className="status">
-          <div>Getting song list...</div>
-          <div className="circles-loader">Loading…</div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="status">{this.props.songsTotalCount} songs to choose from</div>
-      );
-    }
+    if (this.props.display) {
+      if (this.props.songsTotalCount === 0) {
+        return (
+          <div className="status">
+            <div>Getting song list...</div>
+            <div className="circles-loader">Loading…</div>
+          </div>
+        );
+      } else {
+        return (
+          <div className="status">{this.props.songsTotalCount} songs to choose from</div>
+        );
+      }
+    } else return null;
   }
 };
 
@@ -182,22 +196,32 @@ class Letters extends React.Component {
 
 class SingerName extends React.Component {
   render() {
-    return(
-      <div className="singerName highlight">
-
-        <p>In order to get you singing, what name would you like to use?</p>
-        <form
-            onSubmit={this.props.handleSetSingerName}>
-          <label htmlFor="singerName">My name is&nbsp;</label>
-          <input
-            id="singerName"
-            name="singerName"
-            placeholder="..."
-            size="32" />
-          <button>Lets Do This!</button>
-        </form>
-      </div>
-    );
+    if (!this.props.singerName) {
+      return(
+        <div className="singerName highlight">
+          <p>What is your stage name going to be today?</p>
+          <form
+              onSubmit={this.props.handleSetSingerName}>
+            <label htmlFor="singerName">My name is&nbsp;</label>
+            <input
+              id="singerName"
+              name="singerName"
+              placeholder="..." />
+            <button><span role="img" aria-label="Microphone">🎤</span> Lets Do This!</button>
+          </form>
+        </div>
+      );
+    } else {
+      return (
+        <div className="singerName">
+        <br/><br/><br/><br/><br/>
+           <form onSubmit={this.props.handleSetSingerName}>
+             <input type="hidden" id="singerName" name="singerName" value="" />
+              <button>Your adoring fans scream the name "{this.props.singerName}!" but you can always reinvent yourself by clicking here</button>
+          </form>
+        </div>
+      );
+    }
 
   }
 }
@@ -303,6 +327,11 @@ class App extends React.Component {
 
 
   componentDidMount() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("singerName")) {
+      this.setState({singerName: params.get("singerName")})
+    };
+
     request
       .get("./songlist.csv")
       .end((error, response) => {
@@ -428,11 +457,8 @@ class App extends React.Component {
     if (this.state.singerName === "") {
       return (
         <div>
-          <h1>
-            Karaoke <img width="32px" height="32px" src="logo.png" alt="" /> Finder
-          </h1>
+          <Title display={true}/>
           <SingerName
-            singerName={this.state.singerName}
             handleSetSingerName={this.handleSetSingerName} />
         </div>
       )
@@ -465,6 +491,9 @@ class App extends React.Component {
             handleSetSortBy = {this.handleSetSortBy}
             queue={this.state.queue}
             songs={songsToList} />
+          <SingerName
+            singerName={this.state.singerName}
+            handleSetSingerName={this.handleSetSingerName} />
 
         </div>
       );
