@@ -42,7 +42,32 @@ header button {
   border-radius: 0;
 }
 
-button.highlight{
+.singerName {
+  width:100%;
+  position:fixed;
+  bottom:0;
+  border-top:1px solid #888;
+}
+
+.singerName label {
+  width:30%;
+  display:inline-block;
+  font-size:3vw;
+  text-align:right;
+}
+.singerName input {
+  font-size:3vw;
+  width:70%;
+  display:inline-block;
+  border:0;
+  padding:0;
+}
+.missingName input, .missingName label{
+  font-size:4vw;
+
+}
+
+.highlight{
 	background-color:#9af
 }
 
@@ -119,6 +144,9 @@ button.highlight{
 
 
 
+
+
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #111;
@@ -141,7 +169,7 @@ button.highlight{
     border-color:#444;
   }
 
-  button.highlight {
+  .highlight {
     background-color:#D08
   }
 

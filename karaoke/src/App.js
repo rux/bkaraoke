@@ -67,9 +67,9 @@ class SongList extends React.Component{
         );
       });
 
-      const extraHeaderCells = showAllFields ? <><th>Code</th><th>Track</th></> : null; // Nota Bene odd react tag container!
+      const extraHeaderCells = showAllFields ? <><th>Code</th><th>Track</th><th>Singer</th></> : null; // Nota Bene odd react tag container!
 // eslint-disable-next-line
-      const lintFix=<></> // fix for sublimetext syntax highlighting!  This does nothing.
+      //const lintFix=<></> // fix for sublimetext syntax highlighting!  This does nothing.
 
       let sortedBySong, sortedByArtist;
 
@@ -109,6 +109,7 @@ class SongRow extends React.Component{
           <td>{this.props.song.ARTIST}</td>
           <td>{this.props.song["MF CODE"]}</td>
           <td>{this.props.song.TRACK}</td>
+          <td>{this.props.song.SINGERNAME}</td>
         </tr>
       )
     } else {
@@ -151,7 +152,7 @@ class Search extends React.Component {
             placeholder="Search song or artist, at least 3 letters"
             size="32"
             value={this.props.searchTerm}
-            onChange={this.props.handleSearchTermChange} />
+            onChange={this.props.handleChangeSearchTerm} />
         </div>
       );
     } else {
@@ -259,6 +260,26 @@ class Header extends React.Component {
 
 
 
+class SingerName extends React.Component {
+  render() {
+    const missingName = ("" === this.props.singerName) ? " missingName highlight" : "";
+    return(
+      <div className={"singerName" + missingName}>
+        <label htmlFor="singerName">My name is&nbsp;</label>
+        <input
+          name="singerName"
+          placeholder="..."
+          size="32"
+          value={this.props.singerName}
+          onChange={this.props.handleChangeSingerName} />
+      </div>
+    );
+
+  }
+}
+
+
+
 class App extends React.Component {
   state = {
     songs:[],
@@ -267,7 +288,8 @@ class App extends React.Component {
     queue:[],
     queueName:"default-queue",
     mode:"search",
-    sortBy:"SONG"
+    sortBy:"SONG",
+    singerName:""
   };
 
 
@@ -313,8 +335,12 @@ class App extends React.Component {
       })
   }
 
-  handleSearchTermChange = (event) => {
+  handleChangeSearchTerm = (event) => {
     this.setState({mode: "search", searchTerm: event.target.value, browseLetter: ""});
+  }
+
+  handleChangeSingerName = (event) => {
+    this.setState({singerName: event.target.value});
   }
 
 
@@ -345,6 +371,7 @@ class App extends React.Component {
       }
     } else {
       song.TS = timestamp;
+      song.SINGERNAME = this.state.singerName;
       // firebase add this song
       db.collection(this.state.queueName).doc(key).set(song).then(this.getQueue)
     }
@@ -402,7 +429,7 @@ class App extends React.Component {
         <Search
           mode = {this.state.mode}
           searchTerm = {this.state.searchTerm}
-          handleSearchTermChange = {this.handleSearchTermChange} />
+          handleChangeSearchTerm = {this.handleChangeSearchTerm} />
         <Letters
           mode = {this.state.mode}
           browseLetter = {this.state.browseLetter}
@@ -415,6 +442,9 @@ class App extends React.Component {
           handleSetSortBy = {this.handleSetSortBy}
           queue={this.state.queue}
           songs={songsToList} />
+        <SingerName
+          singerName={this.state.singerName}
+          handleChangeSingerName={this.handleChangeSingerName} />
 
       </div>
     );
