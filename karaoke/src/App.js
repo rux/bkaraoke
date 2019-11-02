@@ -242,7 +242,14 @@ class SongList extends React.Component{
     if (this.props.songs.length>0) {
       const songRows = this.props.songs.map((song) => {
         const key = makeKey(song);
-        const inQueue = (this.props.queue.some(queueEntry => makeKey(queueEntry) === key)) ? true : false
+        const inQueue = (this.props.queue.some(queueEntry => makeKey(queueEntry) === key)) ? true : false;
+
+        // If this song is in the queue, set the song name to have the same SINGERNAME
+        // as the queue entry, so if a user clicks on a row we can know whether the
+        // song was theirs or not.
+        const queueEntry = (inQueue === true) ? this.props.queue.filter(queueEntry => makeKey(queueEntry) === key)[0] : {}
+        song.SINGERNAME = queueEntry.SINGERNAME
+      
         return (
           <SongRow
               handleRowClick ={ this.props.handleRowClick }
