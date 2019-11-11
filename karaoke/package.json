@@ -3,12 +3,14 @@
   "version": "0.1.1",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.6.0",
+    "@material-ui/icons": "^4.6.0",
+    "csvtojson": "^2.0",
+    "firebase": "^7.3",
     "react": "^16.11",
     "react-dom": "^16.11",
     "react-scripts": "3.2",
-    "csvtojson": "^2.0",
-    "superagent": "^5.1",
-    "firebase": "^7.2"
+    "superagent": "^5.1"
   },
   "scripts": {
     "start": "react-scripts start",

@@ -1,78 +1,23 @@
 body {
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: #eee;
-  color:#333;
-  padding-top:2.5em;
 }
 
-nav {
-  width:100%;
-  position:fixed;
-  top:0;
-}
-
-h1 {
+h1, h2 {
   text-align:center;
   width:100%;
-  font-weight:normal;
 }
-
-input {
-  border-radius:0;
-}
-
 table {
   width:100%;
   border-collapse: collapse;
 }
 
-button {
-  color:#333;
-  background-color: #ccc;
-  border-color:#aaa;
-}
 
-header button {
-  width:25%;
-  font-size:115%;
-  padding:0.6em 0.2em;
 
-  -webkit-appearance: none;
-  border-radius: 0;
-}
-
-.singerName {
-  width:100%;
-  font-size:1em;
-}
-
-.singerName p {
-  text-align:center;
-  padding:0.5em 0;
-  margin:0;
-}
-
-.singerName label {
-  width:30%;
-  display:inline-block;
-  text-align:right;
-  padding:0.5em 0;
-}
-.singerName input {
-  width:70%;
-  display:inline-block;
-  border:0;
-  padding:0.5em 0;
-}
-.singerName button {
-  width:100%;
-  border:0px;
-  padding:0.5em;
-}
-
-.highlight{
+/*.highlight{
 	background-color:#9af
-}
+}*/
+
+
 
 
 
@@ -91,32 +36,13 @@ header button {
 .status {
   color:#888;
   text-align:center;
-    padding:0.4em;
+  padding:0.4em;
 }
 
-.search {
-  padding: 0.5em 0;
-}
-
-.search input {
-  width:100%;
-  font-size:5vw;
-  margin:0;
-  padding:0;
-  border-left:0;
-  border-right:0;
-}
-
-
-
-.queue {
-  text-align:center;
-}
-
-.queue button {
+.search, .search input, .search svg {
   color:white;
-  background-color:#252;
 }
+
 
 .🎤 td {
   background-color:rgba(153, 170, 255, 0.35);
@@ -127,6 +53,7 @@ header button {
   display:none;
 }
 
+
 .letters {
   display:flex;
   justify-content:center;
@@ -134,11 +61,10 @@ header button {
   margin:0.5em 1em;
 }
 .letters button{
-  min-width:1em;
-  font-size: 200%;
+  min-width:1.5em;
+  font-size: 160%;
   margin:5px;
   padding:5px;
-  border-radius:5px;
 }
 
 
@@ -162,7 +88,7 @@ header button {
 
 
 @media (prefers-color-scheme: dark) {
-  body {
+/*  body {
     background-color: #111;
     color: #ddd;
   }
@@ -190,7 +116,7 @@ header button {
   .🎤 td {
     background-color:rgba(221, 0, 136, 0.25);
   color:#FFF;
-  }
+  }*/
 }
 
 

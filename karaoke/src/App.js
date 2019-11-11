@@ -5,6 +5,24 @@ import csv from "csvtojson"
 import * as firebase from "firebase/app";
 import {firebaseConfig} from "./secrets";
 
+
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
+import Input from '@material-ui/core/Input';
+import TextField from '@material-ui/core/TextField';
+import KeyboardVoiceIcon from '@material-ui/icons/KeyboardVoice';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import SearchIcon from '@material-ui/icons/Search';
+
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+
 require("firebase/firestore");
 
 
@@ -25,15 +43,12 @@ function makeKey(song) {
 
 class Header extends React.Component {
 
-  setHighlight = (mode) => {
-        const o = {};
-        o[mode] = "highlight"
-        return o;
-  }
+
 
   render() {
     // only show title chrome if the user hasn't done anything
     const showTitle = (this.props.songListCount === 0) ? true : false;
+    const showInstructions = ((this.props.songListCount === 0) && (this.props.mode==="search")) ? true : false;
 
     const MAX_QUEUE = 99
     const oversizedQueue = (this.props.queueCount > MAX_QUEUE) ? "+" : "";
@@ -41,26 +56,49 @@ class Header extends React.Component {
     const queueLength = (limitedQueueCount > 0) ? "\u00A0(" + limitedQueueCount + oversizedQueue +")" : null;
 
 
-    const highlight=this.setHighlight(this.props.mode);
 
     return (
+
       <header>
-        <nav>
-          <button className={highlight.search} value="search" onClick={this.props.handleSetMode}>Search</button>
-          <button className={highlight.browseByArtist} value="browseByArtist" onClick={this.props.handleSetMode}>Artists</button>
-          <button className={highlight.browseBySong} value="browseBySong" onClick={this.props.handleSetMode}>Songs</button>
-          <button className={highlight.queue} value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</button>
-        </nav>
+        <AppBar position="static">
+          <Toolbar>
+            <Search 
+              handleChangeSearchTerm={this.props.handleChangeSearchTerm}
+              searchTerm={this.props.searchTerm}
+              mode={this.props.mode} />
+            <Button color="primary" variant="contained" value="browseByArtist" onClick={this.props.handleSetMode}>Artists</Button>
+            <Button color="primary" variant="contained" value="browseBySong" onClick={this.props.handleSetMode}>Songs</Button>
+            <Button  color="primary" variant="contained" value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</Button>
+          </Toolbar>
+        </AppBar>
         <Title display={showTitle} />
-        <Spinner
-            display={showTitle}
-            songsTotalCount={this.props.songsTotalCount} />
+        <Instructions display={showInstructions} />
       </header>
     );
   }
 }
 
 
+
+class Search extends React.Component {
+  render() {
+      return(
+          <Input
+            name="search"
+            className="search"
+            role="search"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            }
+            placeholder="Search..."
+            value={this.props.searchTerm}
+            onChange={this.props.handleChangeSearchTerm} />
+      );
+
+  }
+}
 
 class Title extends React.Component {
   render() {
@@ -74,12 +112,23 @@ class Title extends React.Component {
   }
 };
 
+class Instructions extends React.Component {
+  render() {
+    if (this.props.display) {
+      return (
+        <p className="status">
+          You can find songs either by searching, browsing by the first letter of an artist's name or by the first letter of a song title.
+        </p>
+      );
+    } else return null;
+  }
+};
+
 
 
 
 class Spinner extends React.Component {
   render() {
-    if (this.props.display) {
       if (this.props.songsTotalCount === 0) {
         return (
           <div className="status">
@@ -87,12 +136,7 @@ class Spinner extends React.Component {
             <div className="circles-loader">Loading…</div>
           </div>
         );
-      } else {
-        return (
-          <div className="status">{this.props.songsTotalCount} songs to choose from</div>
-        );
-      }
-    } else return null;
+      } else return null;
   }
 };
 
@@ -101,49 +145,29 @@ class Spinner extends React.Component {
 class Queue extends React.Component {
 
   render() {
-    const showQueueLength = (this.props.mode === "queue") ? "queue" : "queue hidden";
     const showInstructions = (this.props.queue.length > 0) ? "" : "hidden"
-    return (
-      <div
-        className={showQueueLength}>
-        <p>Queued {this.props.queue.length} songs.</p>
-        <p className={showInstructions}>Click on a song to remove it from the queue</p>
-      </div>
-    );
-  }
-}
-
-
-class Search extends React.Component {
-  render() {
-    if (this.props.mode==="search") {
-      return(
-        <div className="search">
-          <input
-            name="search"
-            role="search"
-            placeholder="Search song or artist, at least 3 letters"
-            size="32"
-            value={this.props.searchTerm}
-            onChange={this.props.handleChangeSearchTerm} />
+    if (this.props.mode === "queue") {
+      return (
+        <div className="queue status">
+          <h2>Queued {this.props.queue.length} songs.</h2>
+          <p className={showInstructions}>Click on a song to remove it from the queue</p>
         </div>
       );
-    } else {
-      return null;
-    }
+    } else return null;
   }
 }
+
 
 class Letter extends React.Component {
   render() {
-    const highlight = (this.props.browseLetter === this.props.letter) ? "highlight" : "";
     return (
-      <button
-        className={highlight}
+      <Button
+        color="primary" 
+        variant="contained"
         onClick={this.props.handleBrowse}
         value={this.props.letter}>
           {this.props.letter}
-      </button>
+      </Button>
     );
   }
 }
@@ -155,7 +179,11 @@ class Letters extends React.Component {
       if (this.props.songListCount > 0) {
         return (
             <div className="letters">
-              <button  letter="" onClick={this.props.handleBrowse} >← Back</button>
+              <Button
+               variant="contained"
+                color="primary"
+                letter=""
+                onClick={this.props.handleBrowse} >← Back</Button>
             </div>
           )
       } else {
@@ -173,16 +201,17 @@ class Letters extends React.Component {
         )
       })
 
-        return (
-          <div>
-            <div className="letters">
-              {letterArray}
-            </div>
-            <div className="letters">
-              {numberArray}
-            </div>
+      return (
+        <div>
+          <h2>Browse By {this.props.mode.substring(8,88)} Name</h2>
+          <div className="letters">
+            {letterArray}
           </div>
-        );
+          <div className="letters">
+            {numberArray}
+          </div>
+        </div>
+      );
       }
     } else {
       return null;
@@ -195,34 +224,48 @@ class Letters extends React.Component {
 
 
 class SingerName extends React.Component {
+
+  state={
+    error:""
+  }
+
+  handleClose = () => {
+    const newName=document.getElementById("singerName").value
+    if (newName.length === 0) {
+      this.setState({error:"We need a name"})
+    } else {
+      this.props.handleSetSingerName(newName)
+      this.setState({error:""}, window.scrollTo(0, 0)); // scroll fixes iOS/MUI bug! Don't remove!
+    }
+  }
+
+
+
   render() {
     if (!this.props.singerName) {
       return(
-        <div className="singerName highlight">
-          <p>What is your stage name going to be today?</p>
-          <form
-              onSubmit={this.props.handleSetSingerName}>
-            <label htmlFor="singerName">My name is&nbsp;</label>
-            <input
-              id="singerName"
-              name="singerName"
-              placeholder="..." />
-            <button><span role="img" aria-label="Microphone">🎤</span> Lets Do This!</button>
-          </form>
-        </div>
-      );
-    } else {
-      return (
-        <div className="singerName">
-        <br/><br/><br/><br/><br/>
-           <form onSubmit={this.props.handleSetSingerName}>
-             <input type="hidden" id="singerName" name="singerName" value="" />
-              <button>Your adoring fans scream the name "{this.props.singerName}!" but you can always reinvent yourself by clicking here</button>
-          </form>
-        </div>
-      );
-    }
+        <Dialog open={true} className="singerName" onClose={this.handleClose} >
+          <DialogTitle>What's your name?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>We need to know who to call when your song is next up</DialogContentText>
+              <TextField
+                id="singerName"
+                label="Name"
+                fullWidth
+                name="singerName"
+                helperText={this.state.error}
+                required
+                placeholder="" />
 
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={this.handleClose}
+              startIcon={<KeyboardVoiceIcon />}> Lets Get Singing!</Button>
+          </DialogActions>
+        </Dialog>
+      );
+    } else return null
   }
 }
 
@@ -383,10 +426,9 @@ class App extends React.Component {
     this.setState({mode: "search", searchTerm: event.target.value, browseLetter: ""});
   }
 
-  handleSetSingerName = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.target);
-    this.setState({singerName: data.get("singerName")});
+  handleSetSingerName = (newName) => {
+    console.log("Setting name to " + newName)
+    this.setState({singerName: newName});
   }
 
 
@@ -395,7 +437,7 @@ class App extends React.Component {
   }
 
   handleSetMode = (event) => {
-    const mode = event.target.value;
+    const mode = event.currentTarget.value;
     if (mode === "browseByArtist") {this.handleSetSortBy("ARTIST")}
     if (mode === "browseBySong") {this.handleSetSortBy("SONG")}
     this.setState({mode: mode, searchTerm: "", browseLetter: ""})
@@ -466,16 +508,6 @@ class App extends React.Component {
 
     const songsToList = this.getSongs();
 
-    if (this.state.singerName === "") {
-      return (
-        <div>
-          <Title display={true}/>
-          <SingerName
-            handleSetSingerName={this.handleSetSingerName} />
-        </div>
-      )
-    } else {
-
       return (
         <div>
           <Header
@@ -483,14 +515,14 @@ class App extends React.Component {
             handleSetMode={this.handleSetMode}
             songsTotalCount={this.state.songs.length}
             songListCount={songsToList.length}
-            queueCount={this.state.queue.length} />
+            queueCount={this.state.queue.length}
+            searchTerm = {this.state.searchTerm}
+            handleChangeSearchTerm = {this.handleChangeSearchTerm} />
+        <Spinner
+            songsTotalCount={this.props.songsTotalCount} />
           <Queue
             mode = {this.state.mode}
             queue={this.state.queue} />
-          <Search
-            mode = {this.state.mode}
-            searchTerm = {this.state.searchTerm}
-            handleChangeSearchTerm = {this.handleChangeSearchTerm} />
           <Letters
             mode = {this.state.mode}
             browseLetter = {this.state.browseLetter}
@@ -510,7 +542,7 @@ class App extends React.Component {
         </div>
       );
     }
-  }
+  
 }
 
 export default App;
