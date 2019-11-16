@@ -303,25 +303,36 @@ class SongList extends React.Component{
         );
       });
 
-      const extraHeaderCells = showAllFields ? <><th>Code</th><th>Track</th><th>Singer</th></> : null; // Nota Bene odd react tag container!
-// eslint-disable-next-line
       //const lintFix=<></> // fix for sublimetext syntax highlighting!  This does nothing.
 
-      let sortedBySong, sortedByArtist;
+      let tableHeader;
 
-      if (this.props.mode !== "queue") {
-        sortedBySong =  (this.props.sortBy === "SONG") ? " ▼" : " ▿";
-        sortedByArtist =  (this.props.sortBy === "ARTIST") ? " ▼" : " ▿";
+      if (showAllFields) {
+        tableHeader = <tr>
+                        <th colSpan="2" >Singer</th>
+                        <th id="SONG" onClick={this.handleSetSortBy}>Song</th>
+                        <th id="ARTIST" onClick={this.handleSetSortBy}>Artist</th>
+                        <th>Code : Track</th>
+                      </tr>
+      } else {
+        const sortedBySong = (this.props.sortBy === "SONG") ? " ▼" : " ▿";
+        const sortedByArtist =  (this.props.sortBy === "ARTIST") ? " ▼" : " ▿";
+
+        tableHeader = <tr>
+                        <th colSpan="2" id="SONG" onClick={this.handleSetSortBy}>Song{sortedBySong}</th>
+                        <th id="ARTIST" onClick={this.handleSetSortBy}>Artist{sortedByArtist}</th>
+                      </tr>
       }
 
 
+
+
       return (
-        <table className="songList"><tbody>
-          <tr>
-            <th colSpan="2" id="SONG" onClick={this.handleSetSortBy}>Song{sortedBySong}</th>
-            <th id="ARTIST" onClick={this.handleSetSortBy}>Artist{sortedByArtist}</th>
-            {extraHeaderCells}
-          </tr>
+        <table className="songList">
+        <thead>
+          {tableHeader}
+      </thead>
+        <tbody>
           {songRows}
         </tbody></table>
       );
@@ -341,11 +352,10 @@ class SongRow extends React.Component{
       return (
         <tr className={inQueue} onClick={this.handleClick} >
           <td>{inQueue}</td>
+          <td>{this.props.song.SINGERNAME}</td>
           <td>{this.props.song.SONG}</td>
           <td>{this.props.song.ARTIST}</td>
-          <td>{this.props.song["MF CODE"]}</td>
-          <td>{this.props.song.TRACK}</td>
-          <td>{this.props.song.SINGERNAME}</td>
+          <td>{this.props.song["MF CODE"]} : {this.props.song.TRACK}</td>
         </tr>
       )
     } else {
