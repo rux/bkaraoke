@@ -11,8 +11,9 @@ table {
   border-collapse: collapse;
 }
 
-header div{
+header div, .songList th{
   background-color: rgba(0, 95, 255, 1);
+  color:white;
 }
 
 header button {
@@ -59,7 +60,7 @@ header button {
 
 .🎤 td {
   /*background-color:rgba(153, 170, 255, 0.5);*/
-  background-image:linear-gradient(rgba(0, 95, 255, 0.7) 0%, rgba(146, 0, 255, 0.7) 50%, rgba(255, 46, 25, 0.7) 100%);
+  background-image:linear-gradient(rgb(77, 142, 255) 0%, rgb(172, 80, 255) 50%, rgb(255, 115, 102) 100%);
   background-attachment:fixed;
   color:#FFF;
   border-top: 1px solid white;
