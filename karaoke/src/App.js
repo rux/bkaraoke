@@ -295,7 +295,8 @@ class SongList extends React.Component{
       
         return (
           <SongRow
-              handleRowClick ={ this.props.handleRowClick }
+              handleRowClick = {this.props.handleRowClick}
+              handleMoveSong = {this.props.handleMoveSong}
               song={song}
               inQueue={inQueue}
               showAllFields={showAllFields}
@@ -312,7 +313,8 @@ class SongList extends React.Component{
                         <th colSpan="2" >Singer</th>
                         <th id="SONG" onClick={this.handleSetSortBy}>Song</th>
                         <th id="ARTIST" onClick={this.handleSetSortBy}>Artist</th>
-                        <th>Code : Track</th>
+                        <th>Code [Track]</th>
+                        <th>Reorder</th>
                       </tr>
       } else {
         const sortedBySong = (this.props.sortBy === "SONG") ? " ▼" : " ▿";
@@ -344,18 +346,35 @@ class SongList extends React.Component{
 
 
 class SongRow extends React.Component{
-  handleClick = () => { this.props.handleRowClick(this.props.song); }
+  handleClick = () => {
+    this.props.handleRowClick(this.props.song);
+  }
+
+  handleMoveSong = (event) => {
+    this.props.handleMoveSong(this.props.song, event.target.getAttribute("name"))
+  }
 
   render() {
     const inQueue = this.props.inQueue ? "🎤" : "💿";
     if (this.props.showAllFields) {
       return (
-        <tr className={inQueue} onClick={this.handleClick} >
-          <td>{inQueue}</td>
-          <td>{this.props.song.SINGERNAME}</td>
-          <td>{this.props.song.SONG}</td>
-          <td>{this.props.song.ARTIST}</td>
-          <td>{this.props.song["MF CODE"]} : {this.props.song.TRACK}</td>
+        <tr className={inQueue}>
+          <td onClick={this.handleClick}>{inQueue}</td>
+          <td onClick={this.handleClick}>{this.props.song.SINGERNAME}</td>
+          <td onClick={this.handleClick}>{this.props.song.SONG}</td>
+          <td onClick={this.handleClick}>{this.props.song.ARTIST}</td>
+          <td onClick={this.handleClick} >{this.props.song["MF CODE"]} [{this.props.song.TRACK}]</td>
+          <td className="move-song-buttons">
+              <span 
+                role="img"
+                aria-label="Promote {this.props.song.SONG}" 
+                name="up"
+                onClick={this.handleMoveSong}>🔼</span>&nbsp;<span 
+                role="img"
+                aria-label="Demote {this.props.song.SONG}"
+                name="down"
+                onClick={this.handleMoveSong}>🔽</span>
+          </td>
         </tr>
       )
     } else {
@@ -422,7 +441,7 @@ class App extends React.Component {
   }
 
   getQueue = () => {
-      const fbQueue = db.collection(this.state.queueName).orderBy("TS", "asc") ;
+      const fbQueue = db.collection(this.state.queueName).orderBy("POSITION", "asc") ;
       let that=this;
       fbQueue.get().then(function(querySnapshot) {
         const currentQueue = querySnapshot.docs.map((row) => {
@@ -473,12 +492,36 @@ class App extends React.Component {
         db.collection(this.state.queueName).doc(key).delete().then(this.getQueue)
       }
     } else {
+      // assume that the last song in the queue has the highest number.
+      const nextPosition = this.state.queue.slice(-1)[0]["POSITION"] + 1;
+
+      song.POSITION = nextPosition;
       song.TS = timestamp;
       song.SINGERNAME = this.state.singerName;
       // firebase add this song
       db.collection(this.state.queueName).doc(key).set(song).then(this.getQueue)
     }
   };
+
+
+  handleMoveSong = (song, direction) => {
+    const songPosition = song.POSITION;
+    const songIndex = this.state.queue.findIndex(song => song.POSITION === songPosition);
+
+    const otherSongIndex = (direction === "up") ? songIndex - 1 : songIndex + 1;
+    const otherSong = this.state.queue[otherSongIndex];
+
+    if (undefined !== otherSong) {
+      // console.log ("swapping " + song.SONG + " with " + otherSong.SONG)
+      const otherSongPosition = otherSong.POSITION
+
+      song.POSITION = otherSongPosition;
+      otherSong.POSITION = songPosition;
+
+      db.collection(this.state.queueName).doc(makeKey(song)).set(song).then(this.getQueue)
+      db.collection(this.state.queueName).doc(makeKey(otherSong)).set(otherSong).then(this.getQueue)
+    } 
+  }
 
   getSongs() {
     if (this.state.mode === "search") {
@@ -542,6 +585,7 @@ class App extends React.Component {
             mode={this.state.mode}
             sortBy={this.state.sortBy}
             handleRowClick = {this.handleRowClick}
+            handleMoveSong = {this.handleMoveSong}
             handleSetSortBy = {this.handleSetSortBy}
             queue={this.state.queue}
             songs={songsToList} />

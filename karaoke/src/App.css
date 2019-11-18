@@ -104,6 +104,9 @@ tr.🎤 {
   transition-duration: 1s;
 }
 
+.move-song-buttons span {
+  font-size:200%;
+}
 
 
 
