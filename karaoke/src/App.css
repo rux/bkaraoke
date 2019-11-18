@@ -91,19 +91,6 @@ tr.🎤 {
 
 
 
-
-.songlist tr:nth-child(odd) {
-  background-color:#444;
-}
-.songlist tr:nth-child(even) {
-  background-color:#555;
-}
-.songlist th, .songlist td {
-  font-size: 3vw;
-  padding:0.4em;
-  transition-duration: 1s;
-}
-
 .move-song-buttons span {
   font-size:200%;
 }

@@ -583,7 +583,7 @@ class App extends React.Component {
             handleSetSingerName={this.handleSetSingerName}
             handleChangeSearchTerm = {this.handleChangeSearchTerm} />
         <Spinner
-            songsTotalCount={this.props.songsTotalCount} />
+            songsTotalCount={this.state.songs.length} />
           <Queue
             mode = {this.state.mode}
             queue={this.state.queue} />
