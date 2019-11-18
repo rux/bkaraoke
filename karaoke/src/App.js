@@ -44,6 +44,9 @@ function makeKey(song) {
 class Header extends React.Component {
 
 
+  clearSingerName = () => {
+    this.props.handleSetSingerName("")
+  }
 
   render() {
     // only show title chrome if the user hasn't done anything
@@ -69,10 +72,14 @@ class Header extends React.Component {
             <Button color="primary" variant="contained" value="browseByArtist" onClick={this.props.handleSetMode}>Artists</Button>
             <Button color="primary" variant="contained" value="browseBySong" onClick={this.props.handleSetMode}>Songs</Button>
             <Button  color="primary" variant="contained" value="queue" onClick={this.props.handleSetMode}>Queue{queueLength}</Button>
+            <Button color="primary" variant="contained" value="queue" onClick={this.clearSingerName}>{this.props.singerName}&nbsp;</Button>
           </Toolbar>
         </AppBar>
         <Title display={showTitle} />
         <Instructions display={showInstructions} />
+        <SingerName
+          singerName={this.props.singerName}
+          handleSetSingerName={this.props.handleSetSingerName} />
       </header>
     );
   }
@@ -493,7 +500,9 @@ class App extends React.Component {
       }
     } else {
       // assume that the last song in the queue has the highest number.
-      const nextPosition = this.state.queue.slice(-1)[0]["POSITION"] + 1;
+      const nextPosition = (this.state.queue.length > 0)
+                            ? this.state.queue.slice(-1)[0]["POSITION"] + 1
+                            : 1;
 
       song.POSITION = nextPosition;
       song.TS = timestamp;
@@ -570,6 +579,8 @@ class App extends React.Component {
             songListCount={songsToList.length}
             queueCount={this.state.queue.length}
             searchTerm = {this.state.searchTerm}
+            singerName={this.state.singerName}
+            handleSetSingerName={this.handleSetSingerName}
             handleChangeSearchTerm = {this.handleChangeSearchTerm} />
         <Spinner
             songsTotalCount={this.props.songsTotalCount} />
@@ -589,9 +600,6 @@ class App extends React.Component {
             handleSetSortBy = {this.handleSetSortBy}
             queue={this.state.queue}
             songs={songsToList} />
-          <SingerName
-            singerName={this.state.singerName}
-            handleSetSingerName={this.handleSetSingerName} />
 
         </div>
       );
