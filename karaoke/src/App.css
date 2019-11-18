@@ -17,7 +17,6 @@ header div, .songList th{
 }
 
 header button {
-
   background-image:linear-gradient(rgb(146, 0, 255) 0%, rgba(255, 46, 25) 100%);
   background-attachment:fixed;
 }
@@ -25,7 +24,6 @@ header button {
 /*.highlight{
 	background-color:#9af
 }*/
-
 
 
 .songList th, .songList td {

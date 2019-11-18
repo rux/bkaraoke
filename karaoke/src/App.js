@@ -195,9 +195,9 @@ class Letters extends React.Component {
           )
       } else {
 
-      const letters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-      const numbers =  '1234567890'.split('');
-      const letterArray = letters.map((letter) => {
+        const letters =  'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        const numbers =  '1234567890'.split('');
+        const letterArray = letters.map((letter) => {
         return (
           <Letter key={letter} browseLetter={this.props.browseLetter} letter={letter} handleBrowse={this.props.handleBrowse} />
         )
@@ -332,8 +332,6 @@ class SongList extends React.Component{
                         <th id="ARTIST" onClick={this.handleSetSortBy}>Artist{sortedByArtist}</th>
                       </tr>
       }
-
-
 
 
       return (
@@ -567,44 +565,39 @@ class App extends React.Component {
 
 
   render() {
-
     const songsToList = this.getSongs();
-
-      return (
-        <div>
-          <Header
-            mode={this.state.mode}
-            handleSetMode={this.handleSetMode}
-            songsTotalCount={this.state.songs.length}
-            songListCount={songsToList.length}
-            queueCount={this.state.queue.length}
-            searchTerm = {this.state.searchTerm}
-            singerName={this.state.singerName}
-            handleSetSingerName={this.handleSetSingerName}
-            handleChangeSearchTerm = {this.handleChangeSearchTerm} />
-        <Spinner
-            songsTotalCount={this.state.songs.length} />
-          <Queue
-            mode = {this.state.mode}
-            queue={this.state.queue} />
-          <Letters
-            mode = {this.state.mode}
-            browseLetter = {this.state.browseLetter}
-            songListCount={songsToList.length}
-            handleBrowse={this.handleBrowse} />
-          <SongList
-            mode={this.state.mode}
-            sortBy={this.state.sortBy}
-            handleRowClick = {this.handleRowClick}
-            handleMoveSong = {this.handleMoveSong}
-            handleSetSortBy = {this.handleSetSortBy}
-            queue={this.state.queue}
-            songs={songsToList} />
-
-        </div>
-      );
-    }
-  
+    return (
+      <div>
+        <Header
+          mode={this.state.mode}
+          handleSetMode={this.handleSetMode}
+          songListCount={songsToList.length}
+          queueCount={this.state.queue.length}
+          searchTerm = {this.state.searchTerm}
+          singerName={this.state.singerName}
+          handleSetSingerName={this.handleSetSingerName}
+          handleChangeSearchTerm = {this.handleChangeSearchTerm} />
+      <Spinner
+          songsTotalCount={this.state.songs.length} />
+        <Queue
+          mode = {this.state.mode}
+          queue={this.state.queue} />
+        <Letters
+          mode = {this.state.mode}
+          browseLetter = {this.state.browseLetter}
+          songListCount={songsToList.length}
+          handleBrowse={this.handleBrowse} />
+        <SongList
+          mode={this.state.mode}
+          sortBy={this.state.sortBy}
+          handleRowClick = {this.handleRowClick}
+          handleMoveSong = {this.handleMoveSong}
+          handleSetSortBy = {this.handleSetSortBy}
+          queue={this.state.queue}
+          songs={songsToList} />
+      </div>
+    );
+  }
 }
 
 export default App;
