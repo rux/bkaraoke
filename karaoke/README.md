@@ -43,7 +43,7 @@ This will bring up a dev server to test that the above details are all OK.  If t
 
 4 - Put it on the internet with
 
-	> firebase deploy.
+	> firebase deploy
 
 
 
