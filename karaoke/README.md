@@ -9,31 +9,31 @@ Things to do to get it working
 
 1 - make sure you have a file called secrets.js in the /src/ directory.  All this needs is contents that look just like this...
 
-export const firebaseConfig={
-  apiKey: "something",
-  authDomain: "blah",
-  databaseURL: "beep",
-  projectId: "bop",
-  storageBucket: "boop",
-  messagingSenderId: "123412341234",
-  appId: "1:1234:web:1234e1234b1234"
-}
+	export const firebaseConfig={
+	  apiKey: "something",
+	  authDomain: "blah",
+	  databaseURL: "beep",
+	  projectId: "bop",
+	  storageBucket: "boop",
+	  messagingSenderId: "123412341234",
+	  appId: "1:1234:web:1234e1234b1234"
+	}
 
 This comes from the google firebase admin control panel.
 
 2 - have a dev environment that will let you type
 
- > yarn start
+	> yarn start
 
 This will bring up a dev server to test that the above details are all OK.  If that's all dandy, then run
 
 3 - Build it all with
 
- > yarn build
+	> yarn build
 
 4 - Put it on the internet with
 
- > firebase deploy.
+	> firebase deploy.
 
 
 
