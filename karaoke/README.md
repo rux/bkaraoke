@@ -3,9 +3,19 @@
 New Version, updated to a more modern react.  To get this up super fast, you need the hosting and the database details setting up in the Google Firebase console.
 
 
+## Prerequisites
+
+1 - *Yarn* (which itself depends on a few things)
+
+2 - *Firebase Command line tools*  - on a mac this is easiest done with
+
+	brew install firebase-cli
+
+and more instructions and OSs can be found at [https://firebase.google.com/docs/cli](https://firebase.google.com/docs/cli)
 
 
-Things to do to get it working
+
+## Things to do to get it working
 
 1 - make sure you have a file called secrets.js in the /src/ directory.  All this needs is contents that look just like this...
 
